@@ -1,0 +1,6 @@
+{
+    "name": "stack-parser",
+    "version": "0.1.0",
+    "main": "./stack-parser.js",
+    "dependencies": {}
+}
