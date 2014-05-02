@@ -186,6 +186,19 @@ CapturedExceptions.OPERA_1151 = {
   "    foo();"
 };
 
+CapturedExceptions.OPERA_1215 = {
+    message: "Cannot convert 'x' to object",
+    stack: "<anonymous function>([arguments not available])@http://localhost:8000/ExceptionLab.html:48\n" +
+        "dumpException3([arguments not available])@http://localhost:8000/ExceptionLab.html:46\n" +
+        "<anonymous function>([arguments not available])@http://localhost:8000/ExceptionLab.html:1",
+    stacktrace: "Error thrown at line 48, column 12 in <anonymous function>(x) in http://localhost:8000/ExceptionLab.html:\n" +
+        "    x.undef();\n" +
+        "called from line 46, column 8 in dumpException3() in http://localhost:8000/ExceptionLab.html:\n" +
+        "    dumpException((function(x) {\n" +
+        "called from line 1, column 0 in <anonymous function>(event) in http://localhost:8000/ExceptionLab.html:\n" +
+        "    dumpException3();"
+};
+
 CapturedExceptions.CHROME_15 = {
   'arguments': ["undef"],
   message: "Object #<Object> has no method 'undef'",
@@ -196,7 +209,15 @@ CapturedExceptions.CHROME_15 = {
   "    at scheme://path/to/file.js:24:4"
 };
 
-CapturedExceptions.FIREFOX_36 = {
+CapturedExceptions.CHROME_34 = {
+    message: "Cannot read property 'undef' of null",
+    stack: "TypeError: Cannot read property 'undef' of null\n" +
+        "    at scheme://path/to/file.js:48:14\n" +
+        "    at dumpException3 (scheme://path/to/file.js:52:11)\n" +
+        "    at HTMLButtonElement.onclick (scheme://path/to/file.js:82:126)"
+};
+
+CapturedExceptions.FIREFOX_3 = {
   fileName: "http://127.0.0.1:8000/js/stacktrace.js",
   lineNumber: 44,
   message: "this.undef is not a function",
@@ -211,7 +232,7 @@ CapturedExceptions.FIREFOX_36 = {
   ""
 };
 
-CapturedExceptions.FIREFOX_36_FILE = {
+CapturedExceptions.FIREFOX_3_FILE = {
   fileName: "file:///home/user/js/stacktrace.js",
   lineNumber: 44,
   message: "this.undef is not a function",
@@ -249,12 +270,29 @@ CapturedExceptions.FIREFOX_14 = {
     lineNumber: 48
 };
 
+CapturedExceptions.FIREFOX_29 = {
+    message: "x is null",
+    stack: "dumpException3/<@scheme://path/to/file.js:48\n" +
+        "dumpException3@scheme://path/to/file.js:52\n" +
+        "onclick@scheme://path/to/file.js:1\n" +
+        ""
+};
+
 CapturedExceptions.SAFARI_6 = {
     message: "'null' is not an object (evaluating 'x.undef')",
     stack: "@scheme://path/to/file.js:48\n" +
         "dumpException3@scheme://path/to/file.js:52\n" +
         "onclick@scheme://path/to/file.js:82\n" +
         "[native code]",
+    line: 48,
+    sourceURL: "scheme://path/to/file.js"
+};
+
+CapturedExceptions.SAFARI_7 = {
+    message: "'null' is not an object (evaluating 'x.undef')",
+    stack: "scheme://path/to/file.js:48:14\n" +
+        "dumpException3@scheme://path/to/file.js:52:11\n" +
+        "onclick@scheme://path/to/file.js:82:57",
     line: 48,
     sourceURL: "scheme://path/to/file.js"
 };

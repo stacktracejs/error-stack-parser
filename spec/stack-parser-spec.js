@@ -6,9 +6,10 @@ describe('error-parser.js', function() {
             var unit = new ErrorParser();
             it('should detect V8', function() {
                 expect(unit.chooseParser(CapturedExceptions.CHROME_15)).toBe(unit.parseV8);
+                expect(unit.chooseParser(CapturedExceptions.CHROME_34)).toBe(unit.parseV8);
             });
             it('should detect Firefox', function() {
-                expect(unit.chooseParser(CapturedExceptions.FIREFOX_36)).toBe(unit.parseSpiderMonkey);
+                expect(unit.chooseParser(CapturedExceptions.FIREFOX_3)).toBe(unit.parseSpiderMonkey);
                 expect(unit.chooseParser(CapturedExceptions.FIREFOX_7)).toBe(unit.parseSpiderMonkey);
                 expect(unit.chooseParser(CapturedExceptions.FIREFOX_14)).toBe(unit.parseSpiderMonkey);
             });
