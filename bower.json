@@ -1,0 +1,34 @@
+{
+  "name": "stack-parser",
+  "version": "0.1.0",
+  "main": "./stack-parser.js",
+  "homepage": "https://github.com/stacktracejs/stack-parser.js",
+  "authors": [
+    "Eric Wendelin <me@eriwen.com>"
+  ],
+  "description": "Extract meaning from JS Errors",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "stacktrace",
+    "stack-trace",
+    "backtrace",
+    "cross-browser",
+    "framework-agnostic",
+    "error"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "spec"
+  ],
+  "devDependencies": {
+    "jasmine": "~1.3.1",
+    "jasmine-jstd-adapter": "~1.1.2"
+  }
+}

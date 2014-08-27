@@ -1,127 +1,128 @@
 // TODO: AMD/CommonJS/etc wrapper
 (function stackParser() {
-    // V8 Only: See http://code.google.com/p/v8/wiki/JavaScriptStackTraceApi
-    // TODO: configurable Error.stackTraceLimit = 20;
-
-    function StackEntry(functionName, srcUrl, lineNumber, columnNumber) {
+    function StackFrame(functionName, args, srcUrl, lineNumber, columnNumber) {
         this.fn = functionName;
-        this.args = [];
+        this.args = args;
         this.src = srcUrl;
         this.line = lineNumber;
         this.column = columnNumber;
     }
 
-    function ErrorInfo(stack, message) {
-        this.stack = stack;
-        this.message = message;
-    }
-
-    function ErrorParser() {
-        // TODO: declare regexps here
+    function StackParser() {
+        this.firefoxSafariStackEntryRegExp = /\S+\:\d+/;
+        this.chromeIEStackEntryRegExp = /\s+at /;
 
         /**
-         * Given an Error object, return the function that
-         * will extract the most information from it.
-         * @param e {Error}
-         * @return Function parser
+         * Given an Error object, extract the most information from it.
+         * @param error {Error}
+         * @return Array[StackFrame]
          */
-        this.chooseParser = function(e) {
-            if (e['arguments'] && e.stack) {
-                return this.parseV8;
-            } else if (e.stack && e.sourceURL) {
-                return this.parseNitro;
-            } else if (e.stack && e.number) {
-                return this.parseChakra;
-            } else if (e['opera#sourceloc'] || e.stacktrace) {
-                return this.parseOPERA;
-            } else if (e.stack) {
-                return this.parseSpiderMonkey;
+        this.parse = function parse(error) {
+            if (typeof error.stacktrace === 'string') {
+                return this.parseOpera(error);
+            } else if (error.stack.match(this.chromeIEStackEntryRegExp)) {
+                return this.parseV8OrIE(error);
+            } else if (error.stack.match(this.firefoxSafariStackEntryRegExp)) {
+                return this.parseFFOrSafari(error);
+            } else {
+                throw new Error('Cannot parse given Error object');
             }
-            return this.parseOther;
         };
 
-        this.parseV8 = function(e) { // Chrome and node.js
-            /*stack: "TypeError: Object #<Object> has no method 'undef'\n" +
-            "    at Object.createException (scheme://path/to/stacktrace.js:42:18)\n" +
-            "    at Object.run (scheme://path/to/stacktrace.js:31:25)\n" +
-            "    at printStackTrace (scheme://path/to/stacktrace.js:18:62)\n" +
-            "    at bar (scheme://path/to/file.js:13:17)\n" +
-            "    at bar (scheme://path/to/file.js:16:5)\n" +
-            "    at foo (scheme://path/to/file.js:20:5)\n" +
-            "    at scheme://path/to/file.js:24:4"*/
-            var raw = (e.stack + '\n')
-                .replace(/^[\s\S]+?\s+at\s+/, ' at ') // remove message
-                .replace(/^\s+(at eval )?at\s+/gm, '') // remove 'at' and indentation
-                .replace(/^([^\(]+?)([\n$])/gm, '{anonymous} ($1)$2')
-                .replace(/^Object.<anonymous>\s*\(([^\)]+)\)/gm, '{anonymous} ($1)')
-                .replace(/^(.+) \((.+)\)$/gm, '$1@$2')
-                .split('\n')
-                .slice(0, -1);
+        this.parseV8OrIE = function parseV8OrIE(error) {
+            /* stack: "TypeError: Object #<Object> has no method 'undef'\n" +
+             "    at Object.bar (http://path/to/stacktrace.js:42:18)\n" +
+             "    at foo (http://path/to/file.js:20:5)\n" +
+             "    at http://path/to/file.js:24:4"*/
 
-            // TODO: ensure that all CallSites provide column numbers or m will be null on line 66 because of .*
-            var re = /^([\{\}\.\w]+)@(.*)\:(\d+)\:(\d+)$/;
-            var enhancedStack = raw.filter(function(entry) {
-                return entry.indexOf('@') !== -1;
-            }).map(function(entry) {
-                var m = entry.match(re);
-                return new StackEntry(m[1], m[2], m[3], m[4]);
+            return error.stack.split('\n').splice(1).map(function(line) {
+                var tokens = line.split(/\s+/).splice(2);
+                var location = tokens.pop().replace(/[\(\)\s]/g, '').split(':');
+                var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? '' : tokens[0];
+                return new StackFrame(functionName, [], location[0] + ':' + location[1], location[2], location[3]);
             });
-            return new ErrorInfo(enhancedStack, e.message);
         };
 
-        this.parseNitro = function(e) { //Safari 6
-            /*
-             stack: "@file:///Users/eric/src/javascript-stacktrace/test/functional/ExceptionLab.html:48\n" +
-             "dumpException3@file:///Users/eric/src/javascript-stacktrace/test/functional/ExceptionLab.html:52\n" +
-             "onclick@file:///Users/eric/src/javascript-stacktrace/test/functional/ExceptionLab.html:82\n" +
-             "[native code]"
-             */
-            // TODO: optimization - can pull these RegExps out and only compile them once
-            var raw = e.stack.replace(/\[native code\]\n/m, '')
-                .replace(/^(?=\w+Error\:).*$\n/m, '')
-                .replace(/^@/gm, '{anonymous}@')
-                .split('\n');
-            // TODO: check function identifier defn
-            var re = /^([\{\}\w]+)@(.*)\:(\d+)(\:(\d+))?$/;
-            var enhancedStack = raw.filter(function(entry) {
-                return entry.indexOf('@') !== -1;
-            }).map(function(entry) {
-                var m = entry.match(re);
-                return new StackEntry(m[1], m[2], m[3], m[5]);
+        this.parseFFOrSafari = function parseFFOrSafari(error) {
+            /* stack: "@http://path/to/file.js:48\n" +
+             "bar@http://path/to/file.js:52\n" +
+             "foo@http://path/to/file.js:82\n" +
+             "[native code]" */
+
+            return error.stack.split('\n').filter(function(line) {
+                return !!line.match(this.firefoxSafariStackEntryRegExp);
+            }.bind(this)).map(function(line) {
+                var tokens = line.split('@');
+                var location = tokens.pop().split(':');
+                var functionName = tokens.shift() || '';
+                return new StackFrame(functionName, [], location[0] + ':' + location[1], location[2], location[3]);
             });
-            return new ErrorInfo(enhancedStack, e.message);
         };
 
-        this.parseChakra = function(e) {};
-        this.parseSpiderMonkey = function(e) {};
-        this.parseOPERA = function(e) {
-            // e.message.indexOf("Backtrace:") > -1 -> opera
-            // !e.stacktrace -> opera
-            if (!e.stacktrace) {
-                return 'opera9'; // use e.message
+        this.parseOpera = function parseOpera(e) {
+            if (!e.stacktrace || (e.message.indexOf('\n') > -1
+                    && e.message.split('\n').length > e.stacktrace.split('\n').length)) {
+                return this.parseOpera9(e);
+            } else if (!e.stack) {
+                return this.parseOpera10a(e);
+            } else if (e.stacktrace.indexOf("called from line") < 0) {
+                return this.parseOpera10b(e);
+            } else {
+                return this.parseOpera11(e);
             }
-            // 'opera#sourceloc' in e -> opera9, opera10a
-            if (e.message.indexOf('\n') > -1 && e.message.split('\n').length > e.stacktrace.split('\n').length) {
-                return 'opera9'; // use e.message
-            }
-            // e.stacktrace && !e.stack -> opera10a
-            if (!e.stack) {
-                return 'opera10a'; // use e.stacktrace
-            }
-            // e.stacktrace && e.stack -> opera10b
-            if (e.stacktrace.indexOf("called from line") < 0) {
-                return 'opera10b'; // use e.stacktrace, format differs from 'opera10a'
-            }
-            // e.stacktrace && e.stack -> opera11
-            return 'opera11'; // use e.stacktrace, format differs from 'opera10a', 'opera10b'
         };
-        this.parseOther = function(e) {};
-        this.guessAnonymousFunctionName = function() {
-            // IDEA: can we use sourcemaps here?
+
+        this.parseOpera9 = function parseOpera9(e) {
+            // "  Line 43 of linked script http://path/to.js\n"
+            // "  Line 7 of inline#1 script in http://path/to.js\n"
+            var lineRE = /Line (\d+).*script (?:in )?(\S+)/i;
+            var lines = e.message.split('\n');
+            var result = [];
+
+            for (var i = 2, len = lines.length; i < len; i += 2) {
+                var match = lineRE.exec(lines[i]);
+                if (match) {
+                    result.push(new StackFrame('', [], match[2], match[1]));
+                }
+            }
+
+            return result;
         };
+
+        this.parseOpera10a = function parseOpera10a(e) {
+            // "  Line 27 of linked script http://path/to.js\n"
+            // "  Line 11 of inline#1 script in http://path/to.js: In function foo\n"
+            var ANON = '{anonymous}', lineRE = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
+            var lines = e.stacktrace.split('\n'), result = [];
+
+            for (var i = 0, len = lines.length; i < len; i += 2) {
+                var match = lineRE.exec(lines[i]);
+                if (match) {
+                    var fnName = match[3] || ANON;
+                    result.push(fnName + '()@' + match[2] + ':' + match[1] + ' -- ' + lines[i + 1].replace(/^\s+/, ''));
+                }
+            }
+
+            return result;
+        };
+
+        // Opera 10.65+ Error.stack very similar to FF/Safari
+        this.parseOpera11 = function parseOpera11(error) {
+            return error.stack.split('\n').filter(function(line) {
+                return !!line.match(this.firefoxSafariStackEntryRegExp);
+            }.bind(this)).map(function(line) {
+                var tokens = line.split('@');
+                var location = tokens.pop().split(':');
+                var functionCall = (tokens.shift() || '');
+                var functionName = functionCall.replace(/<anonymous function: (\S+)(\([^\(]*\))?>/, '$1');
+                var args = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1').replace('arguments not available', '').split(',');
+                return new StackFrame(functionName, args, location[0] + ':' + location[1], location[2], location[3]);
+            });
+        }
     }
 
 //    Error.prototype.parseError = function parseError(e) {};
 
-    window.ErrorParser = ErrorParser;
+    window.StackFrame = StackFrame;
+    window.StackParser = StackParser;
 })();

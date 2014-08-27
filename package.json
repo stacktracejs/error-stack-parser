@@ -17,13 +17,6 @@
     "url": "https://github.com/stacktracejs/stack-parser/blob/master/LICENSE"
   }],
   "main": "./stack-parser.js",
-  "engines": {
-    "node": ">= 0.6.0"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "jshint": "0.9.x"
-  },
   "scripts": {
     "test": "make jstd"
   }
