@@ -1,14 +1,33 @@
-// TODO: AMD/CommonJS/etc wrapper
-(function stackParser() {
-    function StackFrame(functionName, args, srcUrl, lineNumber, columnNumber) {
+// TODO: split into new module
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define([], factory);
+    } else if (typeof exports === 'object') {
+        module.exports = factory();
+    } else {
+        root.StackFrame = factory();
+    }
+}(this, function () {
+    return function StackFrame(functionName, args, srcUrl, lineNumber, columnNumber) {
         this.fn = functionName;
         this.args = args;
         this.src = srcUrl;
         this.line = lineNumber;
         this.column = columnNumber;
     }
+}));
 
-    function StackParser() {
+// TODO?: Error.prototype.parseError = function parseError(e) {};
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define([], factory);
+    } else if (typeof exports === 'object') {
+        module.exports = factory();
+    } else {
+        root.StackParser = factory();
+    }
+}(this, function () {
+    return function StackParser() {
         this.firefoxSafariStackEntryRegExp = /\S+\:\d+/;
         this.chromeIEStackEntryRegExp = /\s+at /;
 
@@ -35,7 +54,7 @@
              "    at foo (http://path/to/file.js:20:5)\n" +
              "    at http://path/to/file.js:24:4"*/
 
-            return error.stack.split('\n').splice(1).map(function(line) {
+            return error.stack.split('\n').splice(1).map(function (line) {
                 var tokens = line.split(/\s+/).splice(2);
                 var location = tokens.pop().replace(/[\(\)\s]/g, '').split(':');
                 var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? '' : tokens[0];
@@ -49,9 +68,9 @@
              "foo@http://path/to/file.js:82\n" +
              "[native code]" */
 
-            return error.stack.split('\n').filter(function(line) {
+            return error.stack.split('\n').filter(function (line) {
                 return !!line.match(this.firefoxSafariStackEntryRegExp);
-            }.bind(this)).map(function(line) {
+            }.bind(this)).map(function (line) {
                 var tokens = line.split('@');
                 var location = tokens.pop().split(':');
                 var functionName = tokens.shift() || '';
@@ -61,7 +80,7 @@
 
         this.parseOpera = function parseOpera(e) {
             if (!e.stacktrace || (e.message.indexOf('\n') > -1
-                    && e.message.split('\n').length > e.stacktrace.split('\n').length)) {
+                && e.message.split('\n').length > e.stacktrace.split('\n').length)) {
                 return this.parseOpera9(e);
             } else if (!e.stack) {
                 return this.parseOpera10a(e);
@@ -108,9 +127,9 @@
 
         // Opera 10.65+ Error.stack very similar to FF/Safari
         this.parseOpera11 = function parseOpera11(error) {
-            return error.stack.split('\n').filter(function(line) {
+            return error.stack.split('\n').filter(function (line) {
                 return !!line.match(this.firefoxSafariStackEntryRegExp);
-            }.bind(this)).map(function(line) {
+            }.bind(this)).map(function (line) {
                 var tokens = line.split('@');
                 var location = tokens.pop().split(':');
                 var functionCall = (tokens.shift() || '');
@@ -120,9 +139,5 @@
             });
         }
     }
+}));
 
-//    Error.prototype.parseError = function parseError(e) {};
-
-    window.StackFrame = StackFrame;
-    window.StackParser = StackParser;
-})();
