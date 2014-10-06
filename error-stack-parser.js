@@ -7,11 +7,11 @@
     } else if (typeof exports === 'object') {
         module.exports = factory(require('stackframe'));
     } else {
-        root.StackParser = factory(root.StackFrame);
+        root.ErrorStackParser = factory(root.StackFrame);
     }
 }(this, function () {
     'use strict';
-    return function StackParser() {
+    return function ErrorStackParser() {
         this.firefoxSafariStackEntryRegExp = /\S+\:\d+/;
         this.chromeIEStackEntryRegExp = /\s+at /;
 

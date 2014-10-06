@@ -1,5 +1,5 @@
 {
-  "name": "stack-parser",
+  "name": "error-stack-parser",
   "description": "Extract meaning from JS Errors",
   "author": "Eric Wendelin <me@eriwen.com> (http://eriwen.com)",
   "version": "0.1.0",
@@ -10,16 +10,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/stacktracejs/stack-parser.git"
+    "url": "git://github.com/stacktracejs/error-stack-parser.git"
   },
   "bugs": {
-    "url": "https://github.com/stacktracejs/stack-parser/issues"
+    "url": "https://github.com/stacktracejs/error-stack-parser/issues"
   },
   "licenses": [{
     "type": "Public Domain",
-    "url": "https://github.com/stacktracejs/stack-parser/blob/master/LICENSE"
+    "url": "https://github.com/stacktracejs/error-stack-parser/blob/master/LICENSE"
   }],
-  "main": "./stack-parser.js",
+  "main": "./error-stack-parser.js",
   "scripts": {
     "test": "make jstd"
   }

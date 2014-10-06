@@ -1,8 +1,8 @@
 {
-    "name": "stack-parser",
+    "name": "error-stack-parser",
     "version": "0.1.0",
-    "main": "./stack-parser.js",
-    "homepage": "https://github.com/stacktracejs/stack-parser.js",
+    "main": "./error-stack-parser.js",
+    "homepage": "https://github.com/stacktracejs/error-stack-parser.js",
     "authors": [
         "Eric Wendelin <me@eriwen.com>"
     ],
