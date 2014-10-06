@@ -1,32 +1,16 @@
-// TODO: split into new module
+/* global StackFrame: false */
 (function (root, factory) {
+    'use strict';
+    // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js, Rhino, and browsers.
     if (typeof define === 'function' && define.amd) {
-        define([], factory);
+        define(['stackframe'], factory);
     } else if (typeof exports === 'object') {
-        module.exports = factory();
+        module.exports = factory(require('stackframe'));
     } else {
-        root.StackFrame = factory();
+        root.StackParser = factory(root.StackFrame);
     }
 }(this, function () {
-    return function StackFrame(functionName, args, srcUrl, lineNumber, columnNumber) {
-        this.fn = functionName;
-        this.args = args;
-        this.src = srcUrl;
-        this.line = lineNumber;
-        this.column = columnNumber;
-    }
-}));
-
-// TODO?: Error.prototype.parseError = function parseError(e) {};
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define([], factory);
-    } else if (typeof exports === 'object') {
-        module.exports = factory();
-    } else {
-        root.StackParser = factory();
-    }
-}(this, function () {
+    'use strict';
     return function StackParser() {
         this.firefoxSafariStackEntryRegExp = /\S+\:\d+/;
         this.chromeIEStackEntryRegExp = /\s+at /;
@@ -37,7 +21,7 @@
          * @return Array[StackFrame]
          */
         this.parse = function parse(error) {
-            if (typeof error.stacktrace === 'string') {
+            if (typeof error.stacktrace !== 'undefined' || typeof error['opera#sourceloc'] !== 'undefined') {
                 return this.parseOpera(error);
             } else if (error.stack.match(this.chromeIEStackEntryRegExp)) {
                 return this.parseV8OrIE(error);
@@ -49,38 +33,28 @@
         };
 
         this.parseV8OrIE = function parseV8OrIE(error) {
-            /* stack: "TypeError: Object #<Object> has no method 'undef'\n" +
-             "    at Object.bar (http://path/to/stacktrace.js:42:18)\n" +
-             "    at foo (http://path/to/file.js:20:5)\n" +
-             "    at http://path/to/file.js:24:4"*/
-
             return error.stack.split('\n').splice(1).map(function (line) {
                 var tokens = line.split(/\s+/).splice(2);
                 var location = tokens.pop().replace(/[\(\)\s]/g, '').split(':');
-                var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? '' : tokens[0];
-                return new StackFrame(functionName, [], location[0] + ':' + location[1], location[2], location[3]);
+                var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? undefined : tokens[0];
+                return new StackFrame(functionName, undefined, location[0] + ':' + location[1], location[2], location[3]);
             });
         };
 
         this.parseFFOrSafari = function parseFFOrSafari(error) {
-            /* stack: "@http://path/to/file.js:48\n" +
-             "bar@http://path/to/file.js:52\n" +
-             "foo@http://path/to/file.js:82\n" +
-             "[native code]" */
-
             return error.stack.split('\n').filter(function (line) {
                 return !!line.match(this.firefoxSafariStackEntryRegExp);
             }.bind(this)).map(function (line) {
                 var tokens = line.split('@');
                 var location = tokens.pop().split(':');
-                var functionName = tokens.shift() || '';
-                return new StackFrame(functionName, [], location[0] + ':' + location[1], location[2], location[3]);
+                var functionName = tokens.shift() || undefined;
+                return new StackFrame(functionName, undefined, location[0] + ':' + location[1], location[2], location[3]);
             });
         };
 
         this.parseOpera = function parseOpera(e) {
-            if (!e.stacktrace || (e.message.indexOf('\n') > -1
-                && e.message.split('\n').length > e.stacktrace.split('\n').length)) {
+            if (!e.stacktrace || (e.message.indexOf('\n') > -1 &&
+                    e.message.split('\n').length > e.stacktrace.split('\n').length)) {
                 return this.parseOpera9(e);
             } else if (!e.stack) {
                 return this.parseOpera10a(e);
@@ -92,8 +66,6 @@
         };
 
         this.parseOpera9 = function parseOpera9(e) {
-            // "  Line 43 of linked script http://path/to.js\n"
-            // "  Line 7 of inline#1 script in http://path/to.js\n"
             var lineRE = /Line (\d+).*script (?:in )?(\S+)/i;
             var lines = e.message.split('\n');
             var result = [];
@@ -101,7 +73,7 @@
             for (var i = 2, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame('', [], match[2], match[1]));
+                    result.push(new StackFrame(undefined, undefined, match[2], match[1]));
                 }
             }
 
@@ -109,8 +81,6 @@
         };
 
         this.parseOpera10a = function parseOpera10a(e) {
-            // "  Line 27 of linked script http://path/to.js\n"
-            // "  Line 11 of inline#1 script in http://path/to.js: In function foo\n"
             var ANON = '{anonymous}', lineRE = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
             var lines = e.stacktrace.split('\n'), result = [];
 
@@ -133,11 +103,12 @@
                 var tokens = line.split('@');
                 var location = tokens.pop().split(':');
                 var functionCall = (tokens.shift() || '');
-                var functionName = functionCall.replace(/<anonymous function: (\S+)(\([^\(]*\))?>/, '$1');
-                var args = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1').replace('arguments not available', '').split(',');
+                var functionName = functionCall.replace(/<anonymous function: (\w+)>/, '$1').replace(/\([^\)]*\)/, '') || undefined;
+                var argsRaw = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1') || undefined;
+                var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ? undefined : argsRaw.split(',');
                 return new StackFrame(functionName, args, location[0] + ':' + location[1], location[2], location[3]);
             });
-        }
-    }
+        };
+    };
 }));
 

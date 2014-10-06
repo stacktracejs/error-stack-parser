@@ -4,7 +4,10 @@
   "author": "Eric Wendelin <me@eriwen.com> (http://eriwen.com)",
   "version": "0.1.0",
   "keywords": ["stacktrace", "error"],
-  "homepage": "http://stacktracejs.com",
+  "homepage": "http://www.stacktracejs.com",
+  "dependencies": {
+    "stackframe": "0.1.0"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/stacktracejs/stack-parser.git"
