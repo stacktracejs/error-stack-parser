@@ -32,13 +32,30 @@
             }
         };
 
+        /**
+         * Separate line and column numbers from a URL-like string.
+         * @param urlLike String
+         * @return Array[String]
+         */
+        this.extractLocation = function extractLocation(urlLike) {
+            var locationParts = urlLike.split(':');
+            var lastNumber = locationParts.pop();
+            var possibleNumber = locationParts[locationParts.length - 1];
+            if (possibleNumber != Number(possibleNumber)) {
+                return [locationParts.join(':'), lastNumber, undefined];
+            } else {
+                var lineNumber = locationParts.pop();
+                return [locationParts.join(':'), lineNumber, lastNumber];
+            }
+        };
+
         this.parseV8OrIE = function parseV8OrIE(error) {
             return error.stack.split('\n').splice(1).map(function (line) {
                 var tokens = line.split(/\s+/).splice(2);
-                var location = tokens.pop().replace(/[\(\)\s]/g, '').split(':');
+                var locationParts = this.extractLocation(tokens.pop().replace(/[\(\)\s]/g, ''));
                 var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? undefined : tokens[0];
-                return new StackFrame(functionName, undefined, location[0] + ':' + location[1], location[2], location[3]);
-            });
+                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2]);
+            }.bind(this));
         };
 
         this.parseFFOrSafari = function parseFFOrSafari(error) {
@@ -46,10 +63,10 @@
                 return !!line.match(this.firefoxSafariStackEntryRegExp);
             }.bind(this)).map(function (line) {
                 var tokens = line.split('@');
-                var location = tokens.pop().split(':');
+                var locationParts = this.extractLocation(tokens.pop());
                 var functionName = tokens.shift() || undefined;
-                return new StackFrame(functionName, undefined, location[0] + ':' + location[1], location[2], location[3]);
-            });
+                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2]);
+            }.bind(this));
         };
 
         this.parseOpera = function parseOpera(e) {

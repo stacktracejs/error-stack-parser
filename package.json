@@ -2,11 +2,11 @@
   "name": "error-stack-parser",
   "description": "Extract meaning from JS Errors",
   "author": "Eric Wendelin <me@eriwen.com> (http://eriwen.com)",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": ["stacktrace", "error"],
   "homepage": "http://www.stacktracejs.com",
   "dependencies": {
-    "stackframe": "0.1.0"
+    "stackframe": "~0.1.0"
   },
   "repository": {
     "type": "git",

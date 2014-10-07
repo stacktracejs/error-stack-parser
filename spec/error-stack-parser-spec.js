@@ -28,7 +28,7 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[1]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 1, 1]);
         });
 
-        it('should parse V8 Error stacks', function () {
+        it('should parse V8 Error.stack', function () {
             var stackFrames = unit.parse(CapturedExceptions.CHROME_15);
             expect(stackFrames).toBeTruthy();
             expect(stackFrames.length).toBe(4);
@@ -36,6 +36,13 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[1]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 16, 5]);
             expect(stackFrames[2]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 20, 5]);
             expect(stackFrames[3]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 24, 4]);
+        });
+
+        it('should parse V8 Error.stack entries with port numbers', function () {
+            var stackFrames = unit.parse(CapturedExceptions.CHROME_36);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(2);
+            expect(stackFrames[0]).toMatchStackFrame(['dumpExceptionError', undefined, 'http://localhost:8080/file.js', 41, 27]);
         });
 
         it('should parse IE 10 Error stacks', function () {

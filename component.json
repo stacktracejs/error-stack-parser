@@ -1,6 +1,6 @@
 {
     "name": "error-stack-parser",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "main": "./error-stack-parser.js",
     "dependencies": {
         "stackframe": "0.1.0"

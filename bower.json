@@ -1,14 +1,14 @@
 {
     "name": "error-stack-parser",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "main": "./error-stack-parser.js",
-    "homepage": "https://github.com/stacktracejs/error-stack-parser.js",
+    "homepage": "https://github.com/stacktracejs/error-stack-parser",
     "authors": [
         "Eric Wendelin <me@eriwen.com>"
     ],
     "description": "Extract meaning from JS Errors",
     "dependencies": {
-        "stackframe": "0.1.0"
+        "stackframe": "~0.1.0"
     },
     "devDependencies": {
         "jasmine": "~1.3.1",
@@ -27,7 +27,7 @@
         "framework-agnostic",
         "error"
     ],
-    "license": "MIT",
+    "license": "Public Domain",
     "ignore": [
         "**/.*",
         "node_modules",

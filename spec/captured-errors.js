@@ -159,8 +159,8 @@ CapturedExceptions.CHROME_36 = {
     message: "Default error",
     name: "Error",
     stack: "Error: Default error\n" +
-        "    at dumpExceptionError (file:///Users/eric/src/stacktracejs/stacktrace.js/test/functional/ExceptionLab.html:41:27)\n" +
-        "    at HTMLButtonElement.onclick (file:///Users/eric/src/stacktracejs/stacktrace.js/test/functional/ExceptionLab.html:107:146)"
+        "    at dumpExceptionError (http://localhost:8080/file.js:41:27)\n" +
+        "    at HTMLButtonElement.onclick (http://localhost:8080/file.js:107:146)"
 };
 
 CapturedExceptions.FIREFOX_3 = {
