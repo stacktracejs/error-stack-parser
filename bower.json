@@ -10,10 +10,6 @@
     "dependencies": {
         "stackframe": "~0.1.0"
     },
-    "devDependencies": {
-        "jasmine": "~1.3.1",
-        "jasmine-jstd-adapter": "~1.1.2"
-    },
     "moduleType": [
         "amd",
         "globals",
@@ -25,7 +21,8 @@
         "backtrace",
         "cross-browser",
         "framework-agnostic",
-        "error"
+        "error",
+        "debugger"
     ],
     "license": "Public Domain",
     "ignore": [

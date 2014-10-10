@@ -1,16 +1,23 @@
-BROWSER_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+BROWSERS=Firefox,ChromeCanary,Opera,Safari,PhantomJS
 
-deploy:
-	npm publish
+test:
+	@$(MAKE) lint
+	@NODE_ENV=test ./node_modules/karma/bin/karma start --single-run --browsers $(BROWSERS)
+
+lint:
+	./node_modules/.bin/jshint ./spec/error-stack-parser-spec.js ./error-stack-parser.js
+
+test-ci:
+	$(MAKE) lint
+	@echo TRAVIS_JOB_ID $(TRAVIS_JOB_ID)
+	@NODE_ENV=test ./node_modules/karma/bin/karma start karma.conf.ci.js --single-run && \
+		cat ./coverage/Chrome*/lcov.info | ./node_modules/coveralls/bin/coveralls.js --verbose
 
 browser:
-	open spec/SpecRunner.html
+	open spec/spec-runner.html
 
 phantom:
-	/usr/bin/env DISPLAY=:1 phantomjs spec/lib/run-jasmine.js spec/SpecRunner.html
-
-jstd:
-	/usr/bin/env DISPLAY=:1 java -jar spec/JsTestDriver-1.3.5.jar --config spec/jsTestDriver.conf --browser ${BROWSER_PATH} --port 4224 --tests 'all' --testOutput './target'
+	/usr/bin/env DISPLAY=:1 phantomjs spec/lib/run-jasmine.js spec/spec-runner.html
 
 build: components
 	@component build --dev
@@ -19,6 +26,6 @@ components: component.json
 	@component install --dev
 
 clean:
-	rm -fr build components template.js
+	rm -fr build coverage components template.js
 
-.PHONY: clean
+.PHONY: clean test

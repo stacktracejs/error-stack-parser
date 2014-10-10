@@ -41,11 +41,11 @@
             var locationParts = urlLike.split(':');
             var lastNumber = locationParts.pop();
             var possibleNumber = locationParts[locationParts.length - 1];
-            if (possibleNumber != Number(possibleNumber)) {
-                return [locationParts.join(':'), lastNumber, undefined];
-            } else {
+            if (!isNaN(parseFloat(possibleNumber)) && isFinite(possibleNumber)) {
                 var lineNumber = locationParts.pop();
                 return [locationParts.join(':'), lineNumber, lastNumber];
+            } else {
+                return [locationParts.join(':'), lastNumber, undefined];
             }
         };
 
@@ -98,14 +98,14 @@
         };
 
         this.parseOpera10a = function parseOpera10a(e) {
-            var ANON = '{anonymous}', lineRE = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
-            var lines = e.stacktrace.split('\n'), result = [];
+            var lineRE = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
+            var lines = e.stacktrace.split('\n');
+            var result = [];
 
             for (var i = 0, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    var fnName = match[3] || ANON;
-                    result.push(fnName + '()@' + match[2] + ':' + match[1] + ' -- ' + lines[i + 1].replace(/^\s+/, ''));
+                    result.push(new StackFrame(match[3], undefined, match[2], match[1]));
                 }
             }
 

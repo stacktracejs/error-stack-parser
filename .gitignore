@@ -1,8 +1,5 @@
-lib-cov
 *.seed
 *.log
-*.csv
-*.dat
 *.out
 *.pid
 *.gz
@@ -13,5 +10,8 @@ results
 
 node_modules
 bower_components
+coverage
 
 .idea
+.coveralls.yml
+
