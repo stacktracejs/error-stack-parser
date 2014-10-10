@@ -34,5 +34,8 @@
         "type": "Public Domain",
         "url": "https://github.com/stacktracejs/error-stack-parser/blob/master/LICENSE"
     }],
-    "main": "./error-stack-parser.js"
+    "main": "./error-stack-parser.js",
+    "scripts": {
+        "test": "make clean test"
+    }
 }

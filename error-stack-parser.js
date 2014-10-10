@@ -22,15 +22,15 @@
 
             var aArgs = Array.prototype.slice.call(arguments, 1);
             var fToBind = this;
-            var noOp = function () {
+            var NoOp = function () {
             };
             var fBound = function () {
-                return fToBind.apply(this instanceof noOp && oThis ? this : oThis,
+                return fToBind.apply(this instanceof NoOp && oThis ? this : oThis,
                     aArgs.concat(Array.prototype.slice.call(arguments)));
             };
 
-            noOp.prototype = this.prototype;
-            fBound.prototype = new noOp();
+            NoOp.prototype = this.prototype;
+            fBound.prototype = new NoOp();
 
             return fBound;
         };
@@ -44,11 +44,12 @@
             }
             var O = Object(this);
             var len = O.length >>> 0;
+            var T;
             if (typeof callback !== "function") {
                 throw new TypeError(callback + " is not a function");
             }
             if (arguments.length > 1) {
-                var T = thisArg;
+                T = thisArg;
             }
 
             var A = new Array(len);
