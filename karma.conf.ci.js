@@ -14,17 +14,21 @@ module.exports = function (config) {
             base: 'SauceLabs',
             browserName: 'firefox'
         },
+        sl_opera: {
+            base: 'SauceLabs',
+            browserName: 'opera'
+        },
         sl_ie_11: {
             base: 'SauceLabs',
             browserName: 'internet explorer',
             platform: 'Windows 8.1',
             version: '11'
         },
-        sl_ie_9: {
+        sl_ie_7: {
             base: 'SauceLabs',
             browserName: 'internet explorer',
-            platform: 'Windows 7',
-            version: '9'
+            platform: 'Windows XP',
+            version: '7'
         }
     };
 

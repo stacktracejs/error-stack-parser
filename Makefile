@@ -1,4 +1,4 @@
-BROWSERS=Firefox,ChromeCanary,Opera,Safari,PhantomJS
+BROWSERS=ChromeCanary
 
 test:
 	@$(MAKE) lint
@@ -11,7 +11,7 @@ test-ci:
 	$(MAKE) lint
 	@echo TRAVIS_JOB_ID $(TRAVIS_JOB_ID)
 	@NODE_ENV=test ./node_modules/karma/bin/karma start karma.conf.ci.js --single-run && \
-		cat ./coverage/Chrome*/lcov.info | ./node_modules/coveralls/bin/coveralls.js --verbose
+		cat ./coverage/IE\ 7*/lcov.info | ./node_modules/coveralls/bin/coveralls.js --verbose
 
 browser:
 	open spec/spec-runner.html

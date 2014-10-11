@@ -136,8 +136,8 @@
         };
 
         this.parseV8OrIE = function parseV8OrIE(error) {
-            return error.stack.split('\n').splice(1).map(function (line) {
-                var tokens = line.split(/\s+/).splice(2);
+            return error.stack.split('\n').slice(1).map(function (line) {
+                var tokens = line.replace(/^\s+/, '').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop().replace(/[\(\)\s]/g, ''));
                 var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? undefined : tokens[0];
                 return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2]);
@@ -191,7 +191,7 @@
             for (var i = 0, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame(match[3], undefined, match[2], match[1]));
+                    result.push(new StackFrame(match[3] || undefined, undefined, match[2], match[1]));
                 }
             }
 
