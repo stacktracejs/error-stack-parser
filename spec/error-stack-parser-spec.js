@@ -1,7 +1,7 @@
 /* global StackFrame: false, ErrorStackParser: false, CapturedExceptions: false */
 describe('ErrorStackParser', function () {
     describe('#parse', function () {
-        var unit = new ErrorStackParser();
+        var unit = ErrorStackParser;
         it('should parse Safari 6 Error.stack', function () {
             var stackFrames = unit.parse(CapturedExceptions.SAFARI_6);
             expect(stackFrames).toBeTruthy();

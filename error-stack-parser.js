@@ -9,7 +9,7 @@
     } else {
         root.ErrorStackParser = factory(root.StackFrame);
     }
-}(this, function () {
+}(this, function ErrorStackParser(StackFrame) {
     'use strict';
 
     // ES5 Polyfills
@@ -97,33 +97,33 @@
         };
     }
 
-    return function ErrorStackParser() {
-        this.firefoxSafariStackEntryRegExp = /\S+\:\d+/;
-        this.chromeIEStackEntryRegExp = /\s+at /;
+    var FIREFOX_SAFARI_STACK_REGEXP = /\S+\:\d+/;
+    var CHROME_IE_STACK_REGEXP = /\s+at /;
 
+    return {
         /**
          * Given an Error object, extract the most information from it.
          * @param error {Error}
          * @return Array[StackFrame]
          */
-        this.parse = function parse(error) {
+        parse: function parse(error) {
             if (typeof error.stacktrace !== 'undefined' || typeof error['opera#sourceloc'] !== 'undefined') {
                 return this.parseOpera(error);
-            } else if (error.stack.match(this.chromeIEStackEntryRegExp)) {
+            } else if (error.stack.match(CHROME_IE_STACK_REGEXP)) {
                 return this.parseV8OrIE(error);
-            } else if (error.stack.match(this.firefoxSafariStackEntryRegExp)) {
+            } else if (error.stack.match(FIREFOX_SAFARI_STACK_REGEXP)) {
                 return this.parseFFOrSafari(error);
             } else {
                 throw new Error('Cannot parse given Error object');
             }
-        };
+        },
 
         /**
          * Separate line and column numbers from a URL-like string.
          * @param urlLike String
          * @return Array[String]
          */
-        this.extractLocation = function extractLocation(urlLike) {
+        extractLocation: function extractLocation(urlLike) {
             var locationParts = urlLike.split(':');
             var lastNumber = locationParts.pop();
             var possibleNumber = locationParts[locationParts.length - 1];
@@ -133,29 +133,29 @@
             } else {
                 return [locationParts.join(':'), lastNumber, undefined];
             }
-        };
+        },
 
-        this.parseV8OrIE = function parseV8OrIE(error) {
+        parseV8OrIE: function parseV8OrIE(error) {
             return error.stack.split('\n').slice(1).map(function (line) {
                 var tokens = line.replace(/^\s+/, '').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop().replace(/[\(\)\s]/g, ''));
                 var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? undefined : tokens[0];
                 return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2]);
             }.bind(this));
-        };
+        },
 
-        this.parseFFOrSafari = function parseFFOrSafari(error) {
+        parseFFOrSafari: function parseFFOrSafari(error) {
             return error.stack.split('\n').filter(function (line) {
-                return !!line.match(this.firefoxSafariStackEntryRegExp);
+                return !!line.match(FIREFOX_SAFARI_STACK_REGEXP);
             }.bind(this)).map(function (line) {
                 var tokens = line.split('@');
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = tokens.shift() || undefined;
                 return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2]);
             }.bind(this));
-        };
+        },
 
-        this.parseOpera = function parseOpera(e) {
+        parseOpera: function parseOpera(e) {
             if (!e.stacktrace || (e.message.indexOf('\n') > -1 &&
                 e.message.split('\n').length > e.stacktrace.split('\n').length)) {
                 return this.parseOpera9(e);
@@ -166,9 +166,9 @@
             } else {
                 return this.parseOpera11(e);
             }
-        };
+        },
 
-        this.parseOpera9 = function parseOpera9(e) {
+        parseOpera9: function parseOpera9(e) {
             var lineRE = /Line (\d+).*script (?:in )?(\S+)/i;
             var lines = e.message.split('\n');
             var result = [];
@@ -181,9 +181,9 @@
             }
 
             return result;
-        };
+        },
 
-        this.parseOpera10a = function parseOpera10a(e) {
+        parseOpera10a: function parseOpera10a(e) {
             var lineRE = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
             var lines = e.stacktrace.split('\n');
             var result = [];
@@ -196,12 +196,12 @@
             }
 
             return result;
-        };
+        },
 
         // Opera 10.65+ Error.stack very similar to FF/Safari
-        this.parseOpera11 = function parseOpera11(error) {
+        parseOpera11: function parseOpera11(error) {
             return error.stack.split('\n').filter(function (line) {
-                return !!line.match(this.firefoxSafariStackEntryRegExp);
+                return !!line.match(FIREFOX_SAFARI_STACK_REGEXP);
             }.bind(this)).map(function (line) {
                 var tokens = line.split('@');
                 var location = tokens.pop().split(':');
@@ -211,7 +211,7 @@
                 var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ? undefined : argsRaw.split(',');
                 return new StackFrame(functionName, args, location[0] + ':' + location[1], location[2], location[3]);
             });
-        };
+        }
     };
 }));
 
