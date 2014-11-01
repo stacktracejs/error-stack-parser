@@ -13,12 +13,6 @@ test-ci:
 	@NODE_ENV=test ./node_modules/karma/bin/karma start karma.conf.ci.js --single-run && \
 		cat ./coverage/IE\ 7*/lcov.info | ./node_modules/coveralls/bin/coveralls.js --verbose
 
-browser:
-	open spec/spec-runner.html
-
-phantom:
-	/usr/bin/env DISPLAY=:1 phantomjs spec/lib/run-jasmine.js spec/spec-runner.html
-
 build: components
 	@component build --dev
 
