@@ -1,12 +1,18 @@
 {
     "name": "error-stack-parser",
     "description": "Extract meaning from JS Errors",
-    "author": "Eric Wendelin <me@eriwen.com> (http://eriwen.com)",
-    "version": "0.1.1",
-    "keywords": ["stacktrace", "error"],
+    "maintainers": [
+        "Eric Wendelin <me@eriwen.com> (http://www.eriwen.com)",
+        "Victor Homyakov <vkhomyackov@gmail.com> (https://github.com/victor-homyakov)"
+    ],
+    "version": "0.2.0",
+    "keywords": [
+        "stacktrace",
+        "error"
+    ],
     "homepage": "http://www.stacktracejs.com",
     "dependencies": {
-        "stackframe": "~0.1.0"
+        "stackframe": "~0"
     },
     "repository": {
         "type": "git",
@@ -30,10 +36,12 @@
     "bugs": {
         "url": "https://github.com/stacktracejs/error-stack-parser/issues"
     },
-    "licenses": [{
-        "type": "Public Domain",
-        "url": "https://github.com/stacktracejs/error-stack-parser/blob/master/LICENSE"
-    }],
+    "licenses": [
+        {
+            "type": "Public Domain",
+            "url": "https://github.com/stacktracejs/error-stack-parser/blob/master/LICENSE"
+        }
+    ],
     "main": "./error-stack-parser.js",
     "scripts": {
         "test": "make clean test"
