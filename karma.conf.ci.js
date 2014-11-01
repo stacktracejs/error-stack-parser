@@ -36,9 +36,9 @@ module.exports = function (config) {
         basePath: '',
         frameworks: ['jasmine'],
         files: [
-            'bower_components/stackframe/stackframe.js',
+            'node_modules/stackframe/stackframe.js',
             'error-stack-parser.js',
-            'spec/captured-errors.js',
+            'spec/fixtures/captured-errors.js',
             'spec/spec-helper.js',
             'spec/*-spec.js'
         ],
