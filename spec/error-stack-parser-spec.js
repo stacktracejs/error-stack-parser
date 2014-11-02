@@ -20,6 +20,15 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[2]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 108, 107]);
         });
 
+        it('should parse Safari 8 Error.stack', function () {
+            var stackFrames = unit.parse(CapturedExceptions.SAFARI_8);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(3);
+            expect(stackFrames[0]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 47, 22]);
+            expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 52, 15]);
+            expect(stackFrames[2]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 108, 23]);
+        });
+
         it('should parse Firefox 31 Error.stack', function () {
             var stackFrames = unit.parse(CapturedExceptions.FIREFOX_31);
             expect(stackFrames).toBeTruthy();
@@ -54,6 +63,15 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[2]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 82, 1]);
         });
 
+        it('should parse IE 11 Error stacks', function () {
+            var stackFrames = unit.parse(CapturedExceptions.IE_11);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(3);
+            expect(stackFrames[0]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 47, 21]);
+            expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 45, 13]);
+            expect(stackFrames[2]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 108, 1]);
+        });
+
         it('should parse Opera 9.27 Error messages', function () {
             var stackFrames = unit.parse(CapturedExceptions.OPERA_927);
             expect(stackFrames).toBeTruthy();
@@ -84,6 +102,15 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[1]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 18]);
             expect(stackFrames[2]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 11]);
             expect(stackFrames[3]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 15]);
+        });
+
+        it('should parse Opera 25 Error stacks', function () {
+            var stackFrames = unit.parse(CapturedExceptions.OPERA_25);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(3);
+            expect(stackFrames[0]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 47, 22]);
+            expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 52, 15]);
+            expect(stackFrames[2]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 108, 168]);
         });
     });
 });
