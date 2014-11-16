@@ -6,7 +6,11 @@ beforeEach(function() {
             if (actual.getFunctionName() !== expected[0]) {
                 message += 'expected functionName: ' + actual.getFunctionName() + ' to equal ' + expected[0] + '\n';
             }
-            if (actual.getArgs() !== expected[1]) {
+            if (Array.isArray(actual.getArgs()) && Array.isArray(expected[1])) {
+                if (actual.getArgs().join() !== expected[1].join()) {
+                    message += 'expected args: ' + actual.getArgs() + ' to equal ' + expected[1] + '\n';
+                }
+            } else if (actual.getArgs() !== expected[1]) {
                 message += 'expected args: ' + actual.getArgs() + ' to equal ' + expected[1] + '\n';
             }
             if (actual.getFileName() !== expected[2]) {
