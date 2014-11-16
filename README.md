@@ -13,6 +13,5 @@ ErrorStackParser.parse(new Error("sample"));
 ```
 npm install error-stack-parser
 bower install error-stack-parser
-component install error-stack-parser
-https://raw.githubusercontent.com/stacktracejs/error-stack-parser/master/error-stack-parser.js
+https://raw.githubusercontent.com/stacktracejs/error-stack-parser/master/dist/error-stack-parser.min.js
 ```
