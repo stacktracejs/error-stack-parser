@@ -5,7 +5,7 @@
         "Eric Wendelin <me@eriwen.com> (http://www.eriwen.com)",
         "Victor Homyakov <vkhomyackov@gmail.com> (https://github.com/victor-homyakov)"
     ],
-    "version": "0.2.0",
+    "version": "0.2.1",
     "keywords": [
         "stacktrace",
         "error"
@@ -31,7 +31,8 @@
         "karma-opera-launcher": "^0.1.0",
         "karma-phantomjs-launcher": "^0.1.4",
         "karma-safari-launcher": "^0.1.1",
-        "karma-sauce-launcher": "^0.2.10"
+        "karma-sauce-launcher": "^0.2.10",
+        "uglify-js2": "^2.1.11"
     },
     "bugs": {
         "url": "https://github.com/stacktracejs/error-stack-parser/issues"
