@@ -22,5 +22,6 @@ dist:
 	./node_modules/.bin/uglifyjs2 node_modules/stackframe/stackframe.js error-stack-parser.js \
 	 	-o error-stack-parser.min.js --source-map error-stack-parser.js.map
 	mv error-stack-parser.min.js error-stack-parser.js.map dist/
+	cp error-stack-parser.js dist/
 
 .PHONY: clean test dist
