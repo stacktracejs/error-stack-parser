@@ -5,7 +5,7 @@
         "Eric Wendelin <me@eriwen.com> (http://www.eriwen.com)",
         "Victor Homyakov <vkhomyackov@gmail.com> (https://github.com/victor-homyakov)"
     ],
-    "version": "0.2.1",
+    "version": "0.2.2",
     "keywords": [
         "stacktrace",
         "error"
@@ -21,6 +21,7 @@
     "devDependencies": {
         "colors": "~1.0.3",
         "coveralls": "^2.11.2",
+        "jasmine-node": "~1.14",
         "jshint": "^2.5.6",
         "karma": "~0.12",
         "karma-chrome-launcher": "^0.1.5",
@@ -44,6 +45,13 @@
         }
     ],
     "main": "./error-stack-parser.js",
+    "files": [
+        "LICENSE",
+        "README.md",
+        "error-stack-parser.js",
+        "dist/",
+        "node_modules/stacktrame/"
+    ],
     "scripts": {
         "test": "make clean test"
     }
