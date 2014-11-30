@@ -115,7 +115,8 @@ CapturedExceptions.OPERA_11 = {
     stack: "<anonymous function: run>([arguments not available])@http://path/to/file.js:27\n" +
     "bar([arguments not available])@http://domain.com:1234/path/to/file.js:18\n" +
     "foo([arguments not available])@http://domain.com:1234/path/to/file.js:11\n" +
-    "<anonymous function>@http://path/to/file.js:15",
+    "<anonymous function>@http://path/to/file.js:15\n" +
+    "Error created at <anonymous function>@http://path/to/file.js:15",
     stacktrace: "Error thrown at line 42, column 12 in <anonymous function: createException>() in http://path/to/file.js:\n" +
     "    this.undef();\n" +
     "called from line 27, column 8 in <anonymous function: run>(ex) in http://path/to/file.js:\n" +
