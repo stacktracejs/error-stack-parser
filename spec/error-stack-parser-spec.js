@@ -99,8 +99,8 @@ describe('ErrorStackParser', function () {
             expect(stackFrames).toBeTruthy();
             expect(stackFrames.length).toBe(4);
             expect(stackFrames[0]).toMatchStackFrame(['run', undefined, 'http://path/to/file.js', 27]);
-            expect(stackFrames[1]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 18]);
-            expect(stackFrames[2]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 11]);
+            expect(stackFrames[1]).toMatchStackFrame(['bar', undefined, 'http://domain.com:1234/path/to/file.js', 18]);
+            expect(stackFrames[2]).toMatchStackFrame(['foo', undefined, 'http://domain.com:1234/path/to/file.js', 11]);
             expect(stackFrames[3]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 15]);
         });
 

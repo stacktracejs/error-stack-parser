@@ -113,8 +113,8 @@ CapturedExceptions.OPERA_10 = {
 CapturedExceptions.OPERA_11 = {
     message: "'this.undef' is not a function",
     stack: "<anonymous function: run>([arguments not available])@http://path/to/file.js:27\n" +
-    "bar([arguments not available])@http://path/to/file.js:18\n" +
-    "foo([arguments not available])@http://path/to/file.js:11\n" +
+    "bar([arguments not available])@http://domain.com:1234/path/to/file.js:18\n" +
+    "foo([arguments not available])@http://domain.com:1234/path/to/file.js:11\n" +
     "@http://path/to/file.js:15",
     stacktrace: "Error thrown at line 42, column 12 in <anonymous function: createException>() in http://path/to/file.js:\n" +
     "    this.undef();\n" +

@@ -204,13 +204,13 @@
                 return !!line.match(FIREFOX_SAFARI_STACK_REGEXP);
             }.bind(this)).map(function (line) {
                 var tokens = line.split('@');
-                var location = tokens.pop().split(':');
+                var locationParts = this.extractLocation(tokens.pop());
                 var functionCall = (tokens.shift() || '');
                 var functionName = functionCall.replace(/<anonymous function: (\w+)>/, '$1').replace(/\([^\)]*\)/, '') || undefined;
                 var argsRaw = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1') || undefined;
                 var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ? undefined : argsRaw.split(',');
-                return new StackFrame(functionName, args, location[0] + ':' + location[1], location[2], location[3]);
-            });
+                return new StackFrame(functionName, args, locationParts[0], locationParts[1], locationParts[2]);
+            }.bind(this));
         }
     };
 }));
