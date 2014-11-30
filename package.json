@@ -50,7 +50,7 @@
         "README.md",
         "error-stack-parser.js",
         "dist/",
-        "node_modules/stacktrame/"
+        "node_modules/stackframe/"
     ],
     "scripts": {
         "test": "make clean test"
