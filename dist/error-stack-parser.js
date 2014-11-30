@@ -201,13 +201,19 @@
         // Opera 10.65+ Error.stack very similar to FF/Safari
         parseOpera11: function ErrorStackParser$$parseOpera11(error) {
             return error.stack.split('\n').filter(function (line) {
-                return !!line.match(FIREFOX_SAFARI_STACK_REGEXP);
+                return !!line.match(FIREFOX_SAFARI_STACK_REGEXP) &&
+                    !line.match(/^Error created at/);
             }.bind(this)).map(function (line) {
                 var tokens = line.split('@');
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionCall = (tokens.shift() || '');
-                var functionName = functionCall.replace(/<anonymous function: (\w+)>/, '$1').replace(/\([^\)]*\)/, '') || undefined;
-                var argsRaw = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1') || undefined;
+                var functionName = functionCall
+                        .replace(/<anonymous function(: (\w+))?>/, '$2')
+                        .replace(/\([^\)]*\)/g, '') || undefined;
+                var argsRaw;
+                if (functionCall.match(/\(([^\)]*)\)/)) {
+                    argsRaw = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1');
+                }
                 var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ? undefined : argsRaw.split(',');
                 return new StackFrame(functionName, args, locationParts[0], locationParts[1], locationParts[2]);
             }.bind(this));
