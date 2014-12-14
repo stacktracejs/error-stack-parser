@@ -264,6 +264,11 @@ CapturedExceptions.SAFARI_8_EVAL = {
     column: 18
 };
 
+CapturedExceptions.IE_9 = {
+    message: "Unable to get property 'undef' of undefined or null reference",
+    description: "Unable to get property 'undef' of undefined or null reference"
+};
+
 CapturedExceptions.IE_10 = {
     message: "Unable to get property 'undef' of undefined or null reference",
     stack: "TypeError: Unable to get property 'undef' of undefined or null reference\n" +

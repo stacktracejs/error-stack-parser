@@ -2,6 +2,12 @@
 describe('ErrorStackParser', function () {
     describe('#parse', function () {
         var unit = ErrorStackParser;
+        it('should not parse IE 9 Error', function() {
+            expect(function() {
+                unit.parse(CapturedExceptions.IE_9);
+            }).toThrow(new Error('Cannot parse given Error object'));
+        });
+
         it('should parse Safari 6 Error.stack', function () {
             var stackFrames = unit.parse(CapturedExceptions.SAFARI_6);
             expect(stackFrames).toBeTruthy();

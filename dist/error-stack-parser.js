@@ -1,9 +1,8 @@
-/* global StackFrame: false */
 (function (root, factory) {
     'use strict';
     // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js, Rhino, and browsers.
     if (typeof define === 'function' && define.amd) {
-        define(['stackframe'], factory);
+        define('error-stack-parser', ['stackframe'], factory);
     } else if (typeof exports === 'object') {
         module.exports = factory(require('stackframe'));
     } else {
@@ -13,41 +12,12 @@
     'use strict';
 
     // ES5 Polyfills
-    // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
-    if (!Function.prototype.bind) {
-        Function.prototype.bind = function (oThis) {
-            if (typeof this !== 'function') {
-                throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
-            }
-
-            var aArgs = Array.prototype.slice.call(arguments, 1);
-            var fToBind = this;
-            var NoOp = function () {
-            };
-            var fBound = function () {
-                return fToBind.apply(this instanceof NoOp && oThis ? this : oThis,
-                    aArgs.concat(Array.prototype.slice.call(arguments)));
-            };
-
-            NoOp.prototype = this.prototype;
-            fBound.prototype = new NoOp();
-
-            return fBound;
-        };
-    }
-
     // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
     if (!Array.prototype.map) {
         Array.prototype.map = function(callback, thisArg) {
-            if (this === void 0 || this === null) {
-                throw new TypeError("this is null or not defined");
-            }
             var O = Object(this);
             var len = O.length >>> 0;
             var T;
-            if (typeof callback !== "function") {
-                throw new TypeError(callback + " is not a function");
-            }
             if (arguments.length > 1) {
                 T = thisArg;
             }
@@ -72,15 +42,8 @@
     // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
     if (!Array.prototype.filter) {
         Array.prototype.filter = function(callback/*, thisArg*/) {
-            if (this === void 0 || this === null) {
-                throw new TypeError("this is null or not defined");
-            }
-
             var t = Object(this);
             var len = t.length >>> 0;
-            if (typeof callback !== "function") {
-                throw new TypeError(callback + " is not a function");
-            }
 
             var res = [];
             var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
@@ -109,9 +72,9 @@
         parse: function ErrorStackParser$$parse(error) {
             if (typeof error.stacktrace !== 'undefined' || typeof error['opera#sourceloc'] !== 'undefined') {
                 return this.parseOpera(error);
-            } else if (error.stack.match(CHROME_IE_STACK_REGEXP)) {
+            } else if (error.stack && error.stack.match(CHROME_IE_STACK_REGEXP)) {
                 return this.parseV8OrIE(error);
-            } else if (error.stack.match(FIREFOX_SAFARI_STACK_REGEXP)) {
+            } else if (error.stack && error.stack.match(FIREFOX_SAFARI_STACK_REGEXP)) {
                 return this.parseFFOrSafari(error);
             } else {
                 throw new Error('Cannot parse given Error object');
@@ -141,18 +104,18 @@
                 var locationParts = this.extractLocation(tokens.pop().replace(/[\(\)\s]/g, ''));
                 var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? undefined : tokens[0];
                 return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2]);
-            }.bind(this));
+            }, this);
         },
 
         parseFFOrSafari: function ErrorStackParser$$parseFFOrSafari(error) {
             return error.stack.split('\n').filter(function (line) {
                 return !!line.match(FIREFOX_SAFARI_STACK_REGEXP);
-            }.bind(this)).map(function (line) {
+            }, this).map(function (line) {
                 var tokens = line.split('@');
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = tokens.shift() || undefined;
                 return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2]);
-            }.bind(this));
+            }, this);
         },
 
         parseOpera: function ErrorStackParser$$parseOpera(e) {
@@ -160,9 +123,7 @@
                 e.message.split('\n').length > e.stacktrace.split('\n').length)) {
                 return this.parseOpera9(e);
             } else if (!e.stack) {
-                return this.parseOpera10a(e);
-            } else if (e.stacktrace.indexOf("called from line") < 0) {
-                return this.parseOpera10b(e);
+                return this.parseOpera10(e);
             } else {
                 return this.parseOpera11(e);
             }
@@ -183,7 +144,7 @@
             return result;
         },
 
-        parseOpera10a: function ErrorStackParser$$parseOpera10a(e) {
+        parseOpera10: function ErrorStackParser$$parseOpera10(e) {
             var lineRE = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
             var lines = e.stacktrace.split('\n');
             var result = [];
@@ -203,7 +164,7 @@
             return error.stack.split('\n').filter(function (line) {
                 return !!line.match(FIREFOX_SAFARI_STACK_REGEXP) &&
                     !line.match(/^Error created at/);
-            }.bind(this)).map(function (line) {
+            }, this).map(function (line) {
                 var tokens = line.split('@');
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionCall = (tokens.shift() || '');
@@ -216,7 +177,7 @@
                 }
                 var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ? undefined : argsRaw.split(',');
                 return new StackFrame(functionName, args, locationParts[0], locationParts[1], locationParts[2]);
-            }.bind(this));
+            }, this);
         }
     };
 }));
