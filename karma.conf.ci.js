@@ -6,25 +6,67 @@ module.exports = function (config) {
 
     // Check out https://saucelabs.com/platforms for all browser/platform combos
     var customLaunchers = {
-        sl_chrome: {
+        //slIOS7: {
+        //    base: 'SauceLabs',
+        //    browserName: 'iPhone',
+        //    platform: 'OS X 10.9',
+        //    version: '7.1'
+        //},
+        slIOS8: {
+            base: 'SauceLabs',
+            browserName: 'iPhone',
+            platform: 'OS X 10.9',
+            version: '8.1'
+        },
+        //slAndroid4: {
+        //    base: 'SauceLabs',
+        //    browserName: 'Android',
+        //    platform: 'Linux',
+        //    version: '4.4'
+        //},
+        slChrome: {
             base: 'SauceLabs',
             browserName: 'chrome'
         },
-        sl_firefox: {
+        slFirefox: {
             base: 'SauceLabs',
             browserName: 'firefox'
         },
-        sl_opera: {
+        //slSafari6: {
+        //    base: 'SauceLabs',
+        //    browserName: 'safari',
+        //    platform: 'OS X 10.8',
+        //    version: '6'
+        //},
+        //slSafari7: {
+        //    base: 'SauceLabs',
+        //    browserName: 'safari',
+        //    platform: 'OS X 10.9',
+        //    version: '7'
+        //},
+        //slSafari8: {
+        //    base: 'SauceLabs',
+        //    browserName: 'safari',
+        //    platform: 'OS X 10.10',
+        //    version: '8'
+        //}
+        slOpera: {
             base: 'SauceLabs',
             browserName: 'opera'
         },
-        sl_ie_11: {
+        slIE11: {
             base: 'SauceLabs',
             browserName: 'internet explorer',
             platform: 'Windows 8.1',
             version: '11'
         },
-        sl_ie_7: {
+        //slIE10: {
+        //    base: 'SauceLabs',
+        //    browserName: 'internet explorer',
+        //    platform: 'Windows 8',
+        //    version: '10'
+        //},
+        slIE9: {
             base: 'SauceLabs',
             browserName: 'internet explorer',
             platform: 'Windows XP',
@@ -37,6 +79,7 @@ module.exports = function (config) {
         frameworks: ['jasmine'],
         files: [
             'node_modules/stackframe/stackframe.js',
+            'polyfills.js',
             'error-stack-parser.js',
             'spec/fixtures/captured-errors.js',
             'spec/spec-helper.js',
