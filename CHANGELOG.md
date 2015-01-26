@@ -1,3 +1,6 @@
+## v1.1.1
+* Make sure to include direct dependencies in distributed JS files
+
 ## v1.1.0
 * Move polyfills to separate, optional file
 * Better docs
