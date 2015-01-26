@@ -6,6 +6,7 @@ minified            := $(sources:%.js=%.min.js)
 source_map          := $(sources:%.js=%.js.map)
 specs				:= $(wildcard spec/*-spec.js)
 build_files			:= build/jshint.xml
+direct_dependencies := node_modules/stackframe/dist/stackframe.min.js
 coveralls			:= node_modules/coveralls/bin/coveralls.js
 
 build/jshint.xml: $(sources) $(specs)
@@ -24,9 +25,9 @@ test-ci: $(build_files)
 clean:
 	rm -fr build coverage dist *.log
 
-dist: $(build_files) $(sources)
+dist: $(build_files) $(sources) $(direct_dependencies)
 	mkdir $@
-	uglifyjs2 $(sources) -o $(minified) --source-map $(source_map)
+	uglifyjs2 $(direct_dependencies) $(sources) -o $(minified) --source-map $(source_map)
 	mv $(minified) $(source_map) $@
 	cp $(sources) $@
 
