@@ -38,6 +38,11 @@
          * @return Array[String]
          */
         extractLocation: function ErrorStackParser$$extractLocation(urlLike) {
+            // Guard against strings like "(native)"
+            if (urlLike.indexOf(':') === -1) {
+                return [];
+            }
+
             var locationParts = urlLike.split(':');
             var lastNumber = locationParts.pop();
             var possibleNumber = locationParts[locationParts.length - 1];

@@ -53,6 +53,12 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[3]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 24, 4]);
         });
 
+        it('should parse V8 entries with no location', function () {
+            var stackFrames = unit.parse({stack: "Error\n at Array.forEach (native)"});
+            expect(stackFrames.length).toBe(1);
+            expect(stackFrames[0]).toMatchStackFrame(['Array.forEach', undefined, undefined, undefined, undefined]);
+        });
+
         it('should parse V8 Error.stack entries with port numbers', function () {
             var stackFrames = unit.parse(CapturedExceptions.CHROME_36);
             expect(stackFrames).toBeTruthy();
