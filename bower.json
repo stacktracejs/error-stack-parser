@@ -1,6 +1,6 @@
 {
     "name": "error-stack-parser",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "main": "./error-stack-parser.js",
     "homepage": "https://github.com/stacktracejs/error-stack-parser",
     "authors": [

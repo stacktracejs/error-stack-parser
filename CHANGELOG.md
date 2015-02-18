@@ -1,3 +1,6 @@
+## v1.1.2
+* Handle native functions in V8 stack traces
+
 ## v1.1.1
 * Make sure to include direct dependencies in distributed JS files
 
