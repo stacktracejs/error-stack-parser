@@ -56,7 +56,7 @@ describe('ErrorStackParser', function () {
         it('should parse V8 entries with no location', function () {
             var stackFrames = unit.parse({stack: "Error\n at Array.forEach (native)"});
             expect(stackFrames.length).toBe(1);
-            expect(stackFrames[0]).toMatchStackFrame(['Array.forEach', undefined, undefined, undefined, undefined]);
+            expect(stackFrames[0]).toMatchStackFrame(['Array.forEach', undefined, '(native)', undefined, undefined]);
         });
 
         it('should parse V8 Error.stack entries with port numbers', function () {
