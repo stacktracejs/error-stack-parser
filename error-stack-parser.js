@@ -55,7 +55,9 @@
         },
 
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
-            return error.stack.split('\n').slice(1).map(function (line) {
+            return error.stack.split('\n').filter(function (line) {
+                return !!line.match(CHROME_IE_STACK_REGEXP);
+            }, this).map(function (line) {
                 var tokens = line.replace(/^\s+/, '').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? undefined : tokens[0];
