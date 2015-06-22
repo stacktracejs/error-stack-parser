@@ -61,7 +61,7 @@
                 var tokens = line.replace(/^\s+/, '').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? undefined : tokens[0];
-                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2]);
+                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
             }, this);
         },
 
@@ -72,7 +72,7 @@
                 var tokens = line.split('@');
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = tokens.shift() || undefined;
-                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2]);
+                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
             }, this);
         },
 
@@ -95,7 +95,7 @@
             for (var i = 2, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame(undefined, undefined, match[2], match[1]));
+                    result.push(new StackFrame(undefined, undefined, match[2], match[1], lines[i]));
                 }
             }
 
@@ -110,7 +110,7 @@
             for (var i = 0, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame(match[3] || undefined, undefined, match[2], match[1]));
+                    result.push(new StackFrame(match[3] || undefined, undefined, match[2], match[1], lines[i]));
                 }
             }
 
@@ -134,7 +134,7 @@
                     argsRaw = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1');
                 }
                 var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ? undefined : argsRaw.split(',');
-                return new StackFrame(functionName, args, locationParts[0], locationParts[1], locationParts[2]);
+                return new StackFrame(functionName, args, locationParts[0], locationParts[1], locationParts[2], line);
             }, this);
         }
     };
