@@ -38,7 +38,12 @@
          * @return Array[String]
          */
         extractLocation: function ErrorStackParser$$extractLocation(urlLike) {
-            var locationParts = urlLike.split(':');
+            // Fail-fast but return locations like "(native)"
+            if (urlLike.indexOf(':') === -1) {
+                return [urlLike];
+            }
+
+            var locationParts = urlLike.replace(/[\(\)\s]/g, '').split(':');
             var lastNumber = locationParts.pop();
             var possibleNumber = locationParts[locationParts.length - 1];
             if (!isNaN(parseFloat(possibleNumber)) && isFinite(possibleNumber)) {
@@ -50,11 +55,13 @@
         },
 
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
-            return error.stack.split('\n').slice(1).map(function (line) {
+            return error.stack.split('\n').filter(function (line) {
+                return !!line.match(CHROME_IE_STACK_REGEXP);
+            }, this).map(function (line) {
                 var tokens = line.replace(/^\s+/, '').split(/\s+/).slice(1);
-                var locationParts = this.extractLocation(tokens.pop().replace(/[\(\)\s]/g, ''));
+                var locationParts = this.extractLocation(tokens.pop());
                 var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? undefined : tokens[0];
-                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2]);
+                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
             }, this);
         },
 
@@ -65,7 +72,7 @@
                 var tokens = line.split('@');
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = tokens.shift() || undefined;
-                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2]);
+                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
             }, this);
         },
 
@@ -88,7 +95,7 @@
             for (var i = 2, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame(undefined, undefined, match[2], match[1]));
+                    result.push(new StackFrame(undefined, undefined, match[2], match[1], lines[i]));
                 }
             }
 
@@ -103,7 +110,7 @@
             for (var i = 0, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame(match[3] || undefined, undefined, match[2], match[1]));
+                    result.push(new StackFrame(match[3] || undefined, undefined, match[2], match[1], lines[i]));
                 }
             }
 
@@ -127,7 +134,7 @@
                     argsRaw = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1');
                 }
                 var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ? undefined : argsRaw.split(',');
-                return new StackFrame(functionName, args, locationParts[0], locationParts[1], locationParts[2]);
+                return new StackFrame(functionName, args, locationParts[0], locationParts[1], locationParts[2], line);
             }, this);
         }
     };

@@ -22,6 +22,12 @@
     "devDependencies": {
         "colors": "~1.0.3",
         "coveralls": "^2.11.2",
+        "del": "^1.2.0",
+        "gulp": "^3.9.0",
+        "gulp-concat": "^2.6.0",
+        "gulp-jshint": "^1.11.2",
+        "gulp-sourcemaps": "^1.5.2",
+        "gulp-uglify": "^1.2.0",
         "jasmine-node": "~1.14",
         "jshint": "^2.5.6",
         "karma": "~0.12",
@@ -34,6 +40,7 @@
         "karma-phantomjs-launcher": "^0.1.4",
         "karma-safari-launcher": "^0.1.1",
         "karma-sauce-launcher": "^0.2.10",
+        "run-sequence": "^1.1.1",
         "uglify-js": "^2.2.0"
     },
     "bugs": {
@@ -54,6 +61,6 @@
         "node_modules/stackframe/"
     ],
     "scripts": {
-        "test": "make clean test"
+        "test": "gulp clean test"
     }
 }
