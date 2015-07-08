@@ -95,7 +95,7 @@
             for (var i = 2, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame(undefined, undefined, match[2], match[1], lines[i]));
+                    result.push(new StackFrame(undefined, undefined, match[2], match[1], undefined, lines[i]));
                 }
             }
 
@@ -110,7 +110,7 @@
             for (var i = 0, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame(match[3] || undefined, undefined, match[2], match[1], lines[i]));
+                    result.push(new StackFrame(match[3] || undefined, undefined, match[2], match[1], undefined, lines[i]));
                 }
             }
 
