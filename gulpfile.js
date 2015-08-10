@@ -1,20 +1,22 @@
+var concat = require('gulp-concat');
+var coveralls = require('gulp-coveralls');
 var del = require('del');
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var karma = require('karma').server;
-var concat = require('gulp-concat');
 var runSequence = require('run-sequence');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 
+var polyfills = ['./polyfills.js'];
 var dependencies = ['./node_modules/stackframe/dist/stackframe.js'];
-var sources = 'error-stack-parser.js';
-var minified = sources.replace('.js', '.min.js');
+var source = 'error-stack-parser.js';
 
-gulp.task('lint', function() {
-    return gulp.src(sources)
+gulp.task('lint', function () {
+    return gulp.src(source)
         .pipe(jshint())
-        .pipe(jshint.reporter('checkstyle'));
+        .pipe(jshint.reporter('default'))
+        .pipe(jshint.reporter('fail'));
 });
 
 gulp.task('test', function (done) {
@@ -24,7 +26,7 @@ gulp.task('test', function (done) {
     }, done);
 });
 
-gulp.task('test-ci', function (done) {
+gulp.task('test-ci', ['dist'], function (done) {
     karma.start({
         configFile: __dirname + '/karma.conf.ci.js',
         singleRun: true
@@ -32,21 +34,34 @@ gulp.task('test-ci', function (done) {
 });
 
 gulp.task('copy', function () {
-    var app = gulp.src(sources)
+    return gulp.src(source)
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('compress', function() {
-    return gulp.src(dependencies.concat(sources))
+gulp.task('dist', ['copy'], function() {
+    // Separate distribution for old browsers
+    gulp.src(polyfills.concat(dependencies.concat(source)))
         .pipe(sourcemaps.init())
-        .pipe(concat(minified))
+        .pipe(concat(source.replace('.js', '-with-polyfills.min.js')))
+        .pipe(uglify())
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('dist'));
+
+    return gulp.src(dependencies.concat(source))
+        .pipe(sourcemaps.init())
+        .pipe(concat(source.replace('.js', '.min.js')))
         .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('clean', del.bind(null, ['dist']));
+gulp.task('clean', del.bind(null, ['build', 'coverage', 'dist']));
+
+gulp.task('ci', ['lint', 'test-ci'], function () {
+    gulp.src('./coverage/Chrome*/lcov.info')
+        .pipe(coveralls());
+});
 
 gulp.task('default', ['clean'], function (cb) {
-    runSequence('lint', ['copy', 'compress'], cb);
+    runSequence('lint', 'dist', 'test', cb);
 });

@@ -1,6 +1,8 @@
 (function (root, factory) {
     'use strict';
     // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js, Rhino, and browsers.
+
+    /* istanbul ignore next */
     if (typeof define === 'function' && define.amd) {
         define('error-stack-parser', ['stackframe'], factory);
     } else if (typeof exports === 'object') {
@@ -11,8 +13,8 @@
 }(this, function ErrorStackParser(StackFrame) {
     'use strict';
 
-    var FIREFOX_SAFARI_STACK_REGEXP = /\S+\:\d+/;
-    var CHROME_IE_STACK_REGEXP = /\s+at /;
+    var FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+\:\d+/;
+    var CHROME_IE_STACK_REGEXP = /\s+at .*(\S+\:\d+|\(native\))/;
 
     return {
         /**

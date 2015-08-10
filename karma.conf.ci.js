@@ -78,9 +78,7 @@ module.exports = function (config) {
         basePath: '',
         frameworks: ['jasmine'],
         files: [
-            'node_modules/stackframe/stackframe.js',
-            'polyfills.js',
-            'error-stack-parser.js',
+            'dist/error-stack-parser-with-polyfills.min.js',
             'spec/fixtures/captured-errors.js',
             'spec/spec-helper.js',
             'spec/*-spec.js'

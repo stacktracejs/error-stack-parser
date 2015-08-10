@@ -2,8 +2,8 @@
 describe('ErrorStackParser', function () {
     describe('#parse', function () {
         var unit = ErrorStackParser;
-        it('should not parse IE 9 Error', function() {
-            expect(function() {
+        it('should not parse IE 9 Error', function () {
+            expect(function () {
                 unit.parse(CapturedExceptions.IE_9);
             }).toThrow(new Error('Cannot parse given Error object'));
         });
@@ -123,6 +123,18 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[0]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 47, 22]);
             expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 52, 15]);
             expect(stackFrames[2]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 108, 168]);
+        });
+
+        it('should handle newlines in Error stack messages', function () {
+            var stackFrames = unit.parse({
+                stack: "Error: Problem at this\nlocation. Error code:1234\n" +
+                "    at http://path/to/file.js:47:22\n" +
+                "    at foo (http://path/to/file.js:52:15)"
+            });
+
+            expect(stackFrames.length).toBe(2);
+            expect(stackFrames[0]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 47, 22]);
+            expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 52, 15]);
         });
     });
 });
