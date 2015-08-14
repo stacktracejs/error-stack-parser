@@ -66,7 +66,7 @@ module.exports = function (config) {
         //    platform: 'Windows 8',
         //    version: '10'
         //},
-        slIE9: {
+        slIE7: {
             base: 'SauceLabs',
             browserName: 'internet explorer',
             platform: 'Windows XP',
@@ -78,7 +78,9 @@ module.exports = function (config) {
         basePath: '',
         frameworks: ['jasmine'],
         files: [
-            'dist/error-stack-parser-with-polyfills.min.js',
+            'polyfills.js',
+            'node_modules/stackframe/dist/stackframe.js',
+            'error-stack-parser.js',
             'spec/fixtures/captured-errors.js',
             'spec/spec-helper.js',
             'spec/*-spec.js'

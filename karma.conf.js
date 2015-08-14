@@ -3,7 +3,7 @@ module.exports = function (config) {
         basePath: '',
         frameworks: ['jasmine'],
         files: [
-            'node_modules/stackframe/stackframe.js',
+            'node_modules/stackframe/dist/stackframe.js',
             'error-stack-parser.js',
             'spec/fixtures/captured-errors.js',
             'spec/spec-helper.js',

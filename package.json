@@ -3,9 +3,10 @@
     "description": "Extract meaning from JS Errors",
     "maintainers": [
         "Eric Wendelin <me@eriwen.com> (http://www.eriwen.com)",
-        "Victor Homyakov <vkhomyackov@gmail.com> (https://github.com/victor-homyakov)"
+        "Victor Homyakov <vkhomyackov@gmail.com> (https://github.com/victor-homyakov)",
+        "Oliver Salzburg (https://github.com/oliversalzburg)"
     ],
-    "version": "1.2.1",
+    "version": "1.2.2",
     "license": "SEE LICENSE IN LICENSE",
     "keywords": [
         "stacktrace",
@@ -21,8 +22,7 @@
         "url": "git://github.com/stacktracejs/error-stack-parser.git"
     },
     "devDependencies": {
-        "colors": "~1.0.3",
-        "coveralls": "^2.11.3",
+        "colors": "^1.1.2",
         "del": "^1.2.0",
         "gulp": "^3.9.0",
         "gulp-concat": "^2.6.0",
@@ -38,7 +38,7 @@
         "karma-ie-launcher": "^0.1.5",
         "karma-jasmine": "^0.1.6",
         "karma-opera-launcher": "^0.1.0",
-        "karma-phantomjs2-launcher": "^0.3.0",
+        "karma-phantomjs2-launcher": "^0.3.1",
         "karma-safari-launcher": "^0.1.1",
         "karma-sauce-launcher": "^0.2.10",
         "run-sequence": "^1.1.1"
@@ -46,12 +46,6 @@
     "bugs": {
         "url": "https://github.com/stacktracejs/error-stack-parser/issues"
     },
-    "licenses": [
-        {
-            "type": "Public Domain",
-            "url": "https://github.com/stacktracejs/error-stack-parser/blob/master/LICENSE"
-        }
-    ],
     "main": "./error-stack-parser.js",
     "files": [
         "LICENSE",
@@ -60,6 +54,6 @@
         "dist/"
     ],
     "scripts": {
-        "test": "gulp clean test"
+        "test": "gulp test"
     }
 }
