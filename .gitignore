@@ -4,6 +4,7 @@
 *.pid
 *.gz
 
+bower_components
 node_modules
 build
 coverage
