@@ -11,6 +11,9 @@ Once you have parsed out StackFrames, you can do much more interesting things. S
 Note that in IE9 and earlier, `Error` objects don't have enough information to extract much of anything. In IE 10, `Error`s
 are given a `stack` once they're `throw`n. 
 
+## Browser Support
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/stacktracejs.svg)](https://saucelabs.com/u/stacktracejs)
+
 ## Usage
 ```js
 ErrorStackParser.parse(new Error('boom'));
