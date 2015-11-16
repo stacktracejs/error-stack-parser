@@ -70,7 +70,7 @@ describe('ErrorStackParser', function () {
             var stackFrames = unit.parse(CapturedExceptions.IE_10);
             expect(stackFrames).toBeTruthy();
             expect(stackFrames.length).toBe(3);
-            expect(stackFrames[0]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 48, 13]);
+            expect(stackFrames[0]).toMatchStackFrame(['Anonymous function', undefined, 'http://path/to/file.js', 48, 13]);
             expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 46, 9]);
             expect(stackFrames[2]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 82, 1]);
         });
@@ -79,9 +79,17 @@ describe('ErrorStackParser', function () {
             var stackFrames = unit.parse(CapturedExceptions.IE_11);
             expect(stackFrames).toBeTruthy();
             expect(stackFrames.length).toBe(3);
-            expect(stackFrames[0]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 47, 21]);
+            expect(stackFrames[0]).toMatchStackFrame(['Anonymous function', undefined, 'http://path/to/file.js', 47, 21]);
             expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 45, 13]);
             expect(stackFrames[2]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 108, 1]);
+        });
+
+        it('should parse error stacks with Constructors', function () {
+            var stackFrames = unit.parse(CapturedExceptions.CHROME_46);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(2);
+            expect(stackFrames[0]).toMatchStackFrame(['new CustomError', undefined, 'http://localhost:8080/file.js', 41, 27]);
+            expect(stackFrames[1]).toMatchStackFrame(['HTMLButtonElement.onclick', undefined, 'http://localhost:8080/file.js', 107, 146]);
         });
 
         it('should parse Opera 9.27 Error messages', function () {

@@ -173,6 +173,14 @@ CapturedExceptions.CHROME_36 = {
     "    at HTMLButtonElement.onclick (http://localhost:8080/file.js:107:146)"
 };
 
+CapturedExceptions.CHROME_46 = {
+    message: "Default error",
+    name: "Error",
+    stack: "Error: Default error\n" +
+    "    at new CustomError (http://localhost:8080/file.js:41:27)\n" +
+    "    at HTMLButtonElement.onclick (http://localhost:8080/file.js:107:146)"
+};
+
 CapturedExceptions.FIREFOX_3 = {
     fileName: "http://127.0.0.1:8000/js/stacktrace.js",
     lineNumber: 44,

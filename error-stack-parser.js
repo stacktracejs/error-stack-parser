@@ -62,7 +62,8 @@
             }, this).map(function (line) {
                 var tokens = line.replace(/^\s+/, '').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop());
-                var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? undefined : tokens[0];
+                var functionName = tokens.join(' ') || undefined;
+
                 return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
             }, this);
         },
