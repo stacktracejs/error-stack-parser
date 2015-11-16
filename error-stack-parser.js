@@ -62,7 +62,13 @@
             }, this).map(function (line) {
                 var tokens = line.replace(/^\s+/, '').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop());
-                var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? undefined : tokens[0];
+                var functionName = (!tokens[0]) ? undefined : tokens[0];
+
+                // Special case for IE's 'Anonymous function'
+                if(tokens[0] === 'Anonymous' && tokens[1] === 'function') {
+                    functionName = tokens.slice(0,2).join(' ');
+                }
+
                 return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
             }, this);
         },
