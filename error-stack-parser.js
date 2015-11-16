@@ -15,6 +15,7 @@
 
     var FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+\:\d+/;
     var CHROME_IE_STACK_REGEXP = /\s+at .*(\S+\:\d+|\(native\))/;
+    var ANONYMOUS_FUNCTION_NAME = 'Anonymous function';
 
     return {
         /**
@@ -62,7 +63,13 @@
             }, this).map(function (line) {
                 var tokens = line.replace(/^\s+/, '').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop());
-                var functionName = (!tokens[0] || tokens[0] === 'Anonymous') ? undefined : tokens[0];
+                var functionName = (!tokens[0]) ? ANONYMOUS_FUNCTION_NAME : tokens[0];
+
+                // Special case for IE's 'Anonymous function'
+                if(tokens[0] === 'Anonymous' && tokens[1] === 'function') {
+                    functionName = ANONYMOUS_FUNCTION_NAME;
+                }
+
                 return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
             }, this);
         },
@@ -73,7 +80,7 @@
             }, this).map(function (line) {
                 var tokens = line.split('@');
                 var locationParts = this.extractLocation(tokens.pop());
-                var functionName = tokens.shift() || undefined;
+                var functionName = tokens.shift() || ANONYMOUS_FUNCTION_NAME;
                 return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
             }, this);
         },
@@ -112,7 +119,8 @@
             for (var i = 0, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame(match[3] || undefined, undefined, match[2], match[1], undefined, lines[i]));
+                    var functionName = match[3] || ANONYMOUS_FUNCTION_NAME;
+                    result.push(new StackFrame(functionName, undefined, match[2], match[1], undefined, lines[i]));
                 }
             }
 
@@ -130,7 +138,7 @@
                 var functionCall = (tokens.shift() || '');
                 var functionName = functionCall
                         .replace(/<anonymous function(: (\w+))?>/, '$2')
-                        .replace(/\([^\)]*\)/g, '') || undefined;
+                        .replace(/\([^\)]*\)/g, '') || ANONYMOUS_FUNCTION_NAME;
                 var argsRaw;
                 if (functionCall.match(/\(([^\)]*)\)/)) {
                     argsRaw = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1');
