@@ -47,6 +47,7 @@ module.exports = function (config) {
         slFirefox42: {
             base: 'SauceLabs',
             browserName: 'firefox',
+            platform: 'Windows 8.1',
             version: '42.0'
         },
         slFirefoxBeta: {
