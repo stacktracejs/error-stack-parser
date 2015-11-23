@@ -15,7 +15,6 @@
 
     var FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+\:\d+/;
     var CHROME_IE_STACK_REGEXP = /\s+at .*(\S+\:\d+|\(native\))/;
-
     return {
         /**
          * Given an Error object, extract the most information from it.
@@ -23,15 +22,19 @@
          * @return Array[StackFrame]
          */
         parse: function ErrorStackParser$$parse(error) {
+            if (this.parseV8) {
+              return this.parseV8(this.parse);
+            }
             if (typeof error.stacktrace !== 'undefined' || typeof error['opera#sourceloc'] !== 'undefined') {
                 return this.parseOpera(error);
-            } else if (error.stack && error.stack.match(CHROME_IE_STACK_REGEXP)) {
-                return this.parseV8OrIE(error);
-            } else if (error.stack && error.stack.match(FIREFOX_SAFARI_STACK_REGEXP)) {
-                return this.parseFFOrSafari(error);
-            } else {
-                throw new Error('Cannot parse given Error object');
             }
+            if (error.stack && error.stack.match(CHROME_IE_STACK_REGEXP)) {
+                return this.parseV8OrIE(error);
+            }
+            if (error.stack && error.stack.match(FIREFOX_SAFARI_STACK_REGEXP)) {
+                return this.parseFFOrSafari(error);
+            }
+            throw new Error('Cannot parse given Error object');
         },
 
         /**
@@ -55,6 +58,40 @@
                 return [locationParts.join(':'), lastNumber, undefined];
             }
         },
+
+        parseV8: !!Error.captureStackTrace && (function (ERROR) {
+              var captureStackTrace = ERROR.captureStackTrace;
+              try {
+                captureStackTrace(new ERROR(), captureStackTrace);
+              } catch (ignore) {
+                return false;
+              }
+              function prepareStackTrace(ignore, thisStack) {
+                return thisStack;
+              }
+              return function ErrorStackParser$$parseV8(start) {
+                var temp = ERROR.prepareStackTrace;
+                ERROR.prepareStackTrace = prepareStackTrace;
+                var error = new ERROR();
+                captureStackTrace(error, start);
+                var frames = error.stack.map(function (frame) {
+                  return new StackFrame(
+                    frame.getFunctionName(),
+                    undefined,
+                    frame.getFileName(),
+                    frame.getLineNumber(),
+                    frame.getColumnNumber(),
+                    frame
+                  );
+                });
+                if (temp === undefined) {
+                  delete ERROR.prepareStackTrace;
+                } else {
+                  ERROR.prepareStackTrace = temp;
+                }
+                return frames;
+              };
+            }(Error)),
 
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
             return error.stack.split('\n').filter(function (line) {
@@ -142,4 +179,3 @@
         }
     };
 }));
-
