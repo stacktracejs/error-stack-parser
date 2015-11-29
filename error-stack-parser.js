@@ -14,7 +14,7 @@
     'use strict';
 
     var FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+\:\d+/;
-    var CHROME_IE_STACK_REGEXP = /\s+at .*(\S+\:\d+|\(native\))/;
+    var CHROME_IE_STACK_REGEXP = /\s*at .*(\S+\:\d+|\(native\))/;
 
     return {
         /**
@@ -60,6 +60,11 @@
             return error.stack.split('\n').filter(function (line) {
                 return !!line.match(CHROME_IE_STACK_REGEXP);
             }, this).map(function (line) {
+                if (line.indexOf('(eval at ') > -1) {
+                    // TODO: we need a way of representing location within eval()'d String
+                    // throw away all intermediate "eval at XXX" and location within eval()'d string
+                    line = line.replace(/(\(eval at [^\()]*)|(\)\,.*$)/g, '');
+                }
                 var tokens = line.replace(/^\s+/, '').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = tokens.join(' ') || undefined;
