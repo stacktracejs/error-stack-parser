@@ -35,12 +35,34 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[2]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 108, 23]);
         });
 
+        it('should parse nested eval() from Safari 9', function() {
+            var stackFrames = unit.parse(CapturedExceptions.SAFARI_9_NESTED_EVAL);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(5);
+            expect(stackFrames[0]).toMatchStackFrame(['baz', undefined, undefined, undefined, undefined]);
+            expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, undefined, undefined, undefined]);
+            expect(stackFrames[2]).toMatchStackFrame(['eval code', undefined, undefined, undefined, undefined]);
+            expect(stackFrames[3]).toMatchStackFrame(['speak', undefined, 'http://localhost:8080/file.js', 26, 21]);
+            expect(stackFrames[4]).toMatchStackFrame(['global code', undefined, 'http://localhost:8080/file.js', 33, 18]);
+        });
+
         it('should parse Firefox 31 Error.stack', function () {
             var stackFrames = unit.parse(CapturedExceptions.FIREFOX_31);
             expect(stackFrames).toBeTruthy();
             expect(stackFrames.length).toBe(2);
             expect(stackFrames[0]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 41, 13]);
             expect(stackFrames[1]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 1, 1]);
+        });
+
+        it('should parse nested eval() from Firefox 43', function() {
+            var stackFrames = unit.parse(CapturedExceptions.FIREFOX_43_NESTED_EVAL);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(5);
+            expect(stackFrames[0]).toMatchStackFrame(['baz', undefined, 'http://localhost:8080/file.js', 26, undefined]);
+            expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://localhost:8080/file.js', 26, undefined]);
+            expect(stackFrames[2]).toMatchStackFrame([undefined, undefined, 'http://localhost:8080/file.js', 26, undefined]);
+            expect(stackFrames[3]).toMatchStackFrame(['speak', undefined, 'http://localhost:8080/file.js', 26, 17]);
+            expect(stackFrames[4]).toMatchStackFrame([undefined, undefined, 'http://localhost:8080/file.js', 33, 9]);
         });
 
         it('should parse V8 Error.stack', function () {
@@ -66,6 +88,25 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[0]).toMatchStackFrame(['dumpExceptionError', undefined, 'http://localhost:8080/file.js', 41, 27]);
         });
 
+        it('should parse error stacks with Constructors', function () {
+            var stackFrames = unit.parse(CapturedExceptions.CHROME_46);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(2);
+            expect(stackFrames[0]).toMatchStackFrame(['new CustomError', undefined, 'http://localhost:8080/file.js', 41, 27]);
+            expect(stackFrames[1]).toMatchStackFrame(['HTMLButtonElement.onclick', undefined, 'http://localhost:8080/file.js', 107, 146]);
+        });
+
+        it('should parse nested eval() from V8', function() {
+            var stackFrames = unit.parse(CapturedExceptions.CHROME_48_NESTED_EVAL);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(5);
+            expect(stackFrames[0]).toMatchStackFrame(['baz', undefined, 'http://localhost:8080/file.js', 21, 17]);
+            expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://localhost:8080/file.js', 21, 17]);
+            expect(stackFrames[2]).toMatchStackFrame(['eval', undefined, 'http://localhost:8080/file.js', 21, 17]);
+            expect(stackFrames[3]).toMatchStackFrame(['Object.speak', undefined, 'http://localhost:8080/file.js', 21, 17]);
+            expect(stackFrames[4]).toMatchStackFrame([undefined, undefined, 'http://localhost:8080/file.js', 31, 13]);
+        });
+
         it('should parse IE 10 Error stacks', function () {
             var stackFrames = unit.parse(CapturedExceptions.IE_10);
             expect(stackFrames).toBeTruthy();
@@ -84,12 +125,15 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[2]).toMatchStackFrame(['bar', undefined, 'http://path/to/file.js', 108, 1]);
         });
 
-        it('should parse error stacks with Constructors', function () {
-            var stackFrames = unit.parse(CapturedExceptions.CHROME_46);
+        it('should parse nested eval() from Edge', function() {
+            var stackFrames = unit.parse(CapturedExceptions.EDGE_20_NESTED_EVAL);
             expect(stackFrames).toBeTruthy();
-            expect(stackFrames.length).toBe(2);
-            expect(stackFrames[0]).toMatchStackFrame(['new CustomError', undefined, 'http://localhost:8080/file.js', 41, 27]);
-            expect(stackFrames[1]).toMatchStackFrame(['HTMLButtonElement.onclick', undefined, 'http://localhost:8080/file.js', 107, 146]);
+            expect(stackFrames.length).toBe(5);
+            expect(stackFrames[0]).toMatchStackFrame(['baz', undefined, undefined, 1, 18]);
+            expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, undefined, 2, 90]);
+            expect(stackFrames[2]).toMatchStackFrame(['eval', undefined, undefined, 4, 18]);
+            expect(stackFrames[3]).toMatchStackFrame(['speak', undefined, 'http://localhost:8080/file.js', 25, 17]);
+            expect(stackFrames[4]).toMatchStackFrame(['Global code', undefined, 'http://localhost:8080/file.js', 32, 9]);
         });
 
         it('should parse nested eval() from V8', function() {

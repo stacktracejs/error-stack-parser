@@ -241,6 +241,18 @@ CapturedExceptions.FIREFOX_31 = {
     columnNumber: 12
 };
 
+CapturedExceptions.FIREFOX_43_NESTED_EVAL = {
+    columnNumber: 30,
+    fileName: "http://localhost:8080/file.js line 25 > eval line 2 > eval",
+    lineNumber: 1,
+    message: "message string",
+    stack: "baz@http://localhost:8080/file.js line 26 > eval line 2 > eval:1:30\n" +
+    "foo@http://localhost:8080/file.js line 26 > eval:2:96\n" +
+    "@http://localhost:8080/file.js line 26 > eval:4:18\n" +
+    "speak@http://localhost:8080/file.js:26:17\n" +
+    "@http://localhost:8080/file.js:33:9"
+};
+
 CapturedExceptions.SAFARI_6 = {
     message: "'null' is not an object (evaluating 'x.undef')",
     stack: "@http://path/to/file.js:48\n" +
@@ -283,6 +295,18 @@ CapturedExceptions.SAFARI_8_EVAL = {
     column: 18
 };
 
+CapturedExceptions.SAFARI_9_NESTED_EVAL = {
+    column: 39,
+    line: 1,
+    message: "message string",
+    stack: "baz\n" +
+        "foo\n" +
+        "eval code\n" +
+        "eval@[native code]\n" +
+        "speak@http://localhost:8080/file.js:26:21\n" +
+        "global code@http://localhost:8080/file.js:33:18"
+};
+
 CapturedExceptions.IE_9 = {
     message: "Unable to get property 'undef' of undefined or null reference",
     description: "Unable to get property 'undef' of undefined or null reference"
@@ -309,13 +333,14 @@ CapturedExceptions.IE_11 = {
     number: -2146823281
 };
 
-CapturedExceptions.IE_11_EVAL = {
-    message: "'getExceptionProps' is undefined",
-    name: "ReferenceError",
-    stack: "ReferenceError: 'getExceptionProps' is undefined\n" +
-    "   at eval code (eval code:1:1)\n" +
-    "   at foo (http://path/to/file.js:58:17)\n" +
-    "   at bar (http://path/to/file.js:109:1)",
-    description: "'getExceptionProps' is undefined",
-    number: -2146823279
+CapturedExceptions.EDGE_20_NESTED_EVAL = {
+    description: "message string",
+    message: "message string",
+    name: "Error",
+    stack: "Error: message string\n" +
+    "  at baz (eval code:1:18)\n" +
+    "  at foo (eval code:2:90)\n" +
+    "  at eval code (eval code:4:18)\n" +
+    "  at speak (http://localhost:8080/file.js:25:17)\n" +
+    "  at Global code (http://localhost:8080/file.js:32:9)"
 };
