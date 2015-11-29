@@ -14,7 +14,8 @@
     'use strict';
 
     var FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+\:\d+/;
-    var CHROME_IE_STACK_REGEXP = /\s*at .*(\S+\:\d+|\(native\))/;
+    var CHROME_IE_STACK_REGEXP = /^\s*at .*(\S+\:\d+|\(native\))/m;
+    var SAFARI_NATIVE_CODE_REGEXP = /^(eval@)?(\[native code\])?$/;
 
     return {
         /**
@@ -60,27 +61,37 @@
             return error.stack.split('\n').filter(function (line) {
                 return !!line.match(CHROME_IE_STACK_REGEXP);
             }, this).map(function (line) {
-                if (line.indexOf('(eval at ') > -1) {
-                    // TODO: we need a way of representing location within eval()'d String
-                    // throw away all intermediate "eval at XXX" and location within eval()'d string
-                    line = line.replace(/(\(eval at [^\()]*)|(\)\,.*$)/g, '');
+                if (line.indexOf('(eval ') > -1) {
+                    // Throw away eval information until we implement stacktrace.js/stackframe#8
+                    line = line.replace(/eval code/g, 'eval').replace(/(\(eval at [^\()]*)|(\)\,.*$)/g, '');
                 }
-                var tokens = line.replace(/^\s+/, '').split(/\s+/).slice(1);
+                var tokens = line.replace(/^\s+/, '').replace(/\(eval code/g, '(').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = tokens.join(' ') || undefined;
+                var fileName = locationParts[0] === 'eval' ? undefined : locationParts[0];
 
-                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
+                return new StackFrame(functionName, undefined, fileName, locationParts[1], locationParts[2], line);
             }, this);
         },
 
         parseFFOrSafari: function ErrorStackParser$$parseFFOrSafari(error) {
             return error.stack.split('\n').filter(function (line) {
-                return !!line.match(FIREFOX_SAFARI_STACK_REGEXP);
+                return !line.match(SAFARI_NATIVE_CODE_REGEXP);
             }, this).map(function (line) {
-                var tokens = line.split('@');
-                var locationParts = this.extractLocation(tokens.pop());
-                var functionName = tokens.shift() || undefined;
-                return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
+                // Throw away eval information until we implement stacktrace.js/stackframe#8
+                if (line.indexOf(' > eval') > -1) {
+                    line = line.replace(/ line (\d+)(?: > eval line \d+)* > eval\:\d+\:\d+/g, ':$1');
+                }
+
+                if (line.indexOf('@') === -1 && line.indexOf(':') === -1) {
+                    // Safari eval frames only have function names and nothing else
+                    return new StackFrame(line);
+                } else {
+                    var tokens = line.split('@');
+                    var locationParts = this.extractLocation(tokens.pop());
+                    var functionName = tokens.shift() || undefined;
+                    return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
+                }
             }, this);
         },
 
