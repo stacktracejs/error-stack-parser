@@ -181,6 +181,17 @@ CapturedExceptions.CHROME_46 = {
     "    at HTMLButtonElement.onclick (http://localhost:8080/file.js:107:146)"
 };
 
+CapturedExceptions.CHROME_48_NESTED_EVAL = {
+    message: "message string",
+    name: "Error",
+    stack: "Error: message string\n" +
+    "at baz (eval at foo (eval at speak (http://localhost:8080/file.js:21:17)), <anonymous>:1:30)\n" +
+    "at foo (eval at speak (http://localhost:8080/file.js:21:17), <anonymous>:2:96)\n" +
+    "at eval (eval at speak (http://localhost:8080/file.js:21:17), <anonymous>:4:18)\n" +
+    "at Object.speak (http://localhost:8080/file.js:21:17)\n" +
+    "at http://localhost:8080/file.js:31:13\n"
+};
+
 CapturedExceptions.FIREFOX_3 = {
     fileName: "http://127.0.0.1:8000/js/stacktrace.js",
     lineNumber: 44,

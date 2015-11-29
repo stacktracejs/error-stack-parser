@@ -92,6 +92,17 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[1]).toMatchStackFrame(['HTMLButtonElement.onclick', undefined, 'http://localhost:8080/file.js', 107, 146]);
         });
 
+        it('should parse nested eval() from V8', function() {
+            var stackFrames = unit.parse(CapturedExceptions.CHROME_48_NESTED_EVAL);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(5);
+            expect(stackFrames[0]).toMatchStackFrame(['baz', undefined, 'http://localhost:8080/file.js', 21, 17]);
+            expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://localhost:8080/file.js', 21, 17]);
+            expect(stackFrames[2]).toMatchStackFrame(['eval', undefined, 'http://localhost:8080/file.js', 21, 17]);
+            expect(stackFrames[3]).toMatchStackFrame(['Object.speak', undefined, 'http://localhost:8080/file.js', 21, 17]);
+            expect(stackFrames[4]).toMatchStackFrame([undefined, undefined, 'http://localhost:8080/file.js', 31, 13]);
+        });
+
         it('should parse Opera 9.27 Error messages', function () {
             var stackFrames = unit.parse(CapturedExceptions.OPERA_927);
             expect(stackFrames).toBeTruthy();
