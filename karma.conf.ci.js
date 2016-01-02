@@ -16,7 +16,7 @@ module.exports = function (config) {
             base: 'SauceLabs',
             browserName: 'iPhone',
             platform: 'OS X 10.11',
-            version: '9.1'
+            version: '9.2'
         },
         slAndroid4: {
             base: 'SauceLabs',
@@ -48,7 +48,7 @@ module.exports = function (config) {
             base: 'SauceLabs',
             browserName: 'firefox',
             platform: 'Windows 8.1',
-            version: '42.0'
+            version: '43.0'
         },
         slFirefoxDev: {
             base: 'SauceLabs',
@@ -114,7 +114,6 @@ module.exports = function (config) {
         basePath: '',
         frameworks: ['jasmine'],
         files: [
-            'polyfills.js',
             'node_modules/stackframe/dist/stackframe.js',
             'error-stack-parser.js',
             'spec/fixtures/captured-errors.js',
@@ -140,7 +139,7 @@ module.exports = function (config) {
         },
         customLaunchers: customLaunchers,
         browsers: Object.keys(customLaunchers),
-        reporters: ['progress', 'saucelabs', 'coverage'],
+        reporters: ['dots', 'saucelabs', 'coverage'],
         preprocessors: {
             'error-stack-parser.js': 'coverage'
         },
