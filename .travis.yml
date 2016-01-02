@@ -1,14 +1,15 @@
 language: node_js
-node_js:
-- '0.12'
-script: gulp ci
-install:
-- npm install
-- npm install bower -g
 sudo: false
+node_js: stable
 addons:
   sauce_connect: true
-env:
-  global:
-    - secure: brlBdQKd+JQYF7/yQgQi2/V0y1Ch90oxnx7Cc0HESh5jICq+Yo7sA5AH01ODI6X4m1LK8lfFRk2YFO5dZG6Go2PkTC+n/6jKl3AgnvenNapDnd9oa2uZLt7pzr3hgrkHmqy9FJgPs9bIQmPA4i0ZuZACy33I4RoJGqkFkxsaq8g=
-    - secure: X+MdR5yUNPFOxATQZP9HzGSun2PZHlQXgb/DV17LQGWJLWI/OLzQS/h6WFelS0cvQ85zEG2kIUNZN8EuKSwxzUFiqWQTgEAN6lBx3fg5UH6hxku1bbJoYJJJiTVJo5kyH/s/dEOZZn+lw6al5Q/b9t97SQ6aHZsKfLPeqDZtl7s=
+  firefox: latest
+  apt:
+    sources:
+    - google-chrome
+    packages:
+    - google-chrome-stable
+before_script:
+- npm install
+script:
+- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then gulp ci; else gulp pr; fi
