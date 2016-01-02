@@ -8,7 +8,6 @@ var runSequence = require('run-sequence');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 
-var polyfills = ['./polyfills.js'];
 var dependencies = ['./node_modules/stackframe/dist/stackframe.js'];
 var source = 'error-stack-parser.js';
 
@@ -20,19 +19,25 @@ gulp.task('lint', function () {
 });
 
 gulp.task('test', function (done) {
-    var server = new karma.Server({
+    new karma.Server({
         configFile: __dirname + '/karma.conf.js',
         singleRun: true
-    }, done);
-    server.start();
+    }, done).start();
+});
+
+gulp.task('test-pr', ['copy', 'dist'], function (done) {
+    new karma.Server({
+        configFile: __dirname + '/karma.conf.js',
+        browsers: ['Firefox', 'Chrome'],
+        singleRun: true
+    }, done).start();
 });
 
 gulp.task('test-ci', ['dist'], function (done) {
-    var server = new karma.Server({
+    new karma.Server({
         configFile: __dirname + '/karma.conf.ci.js',
         singleRun: true
-    }, done);
-    server.start();
+    }, done).start();
 });
 
 gulp.task('copy', function () {
@@ -41,14 +46,6 @@ gulp.task('copy', function () {
 });
 
 gulp.task('dist', ['copy'], function() {
-    // Separate distribution for old browsers
-    gulp.src(polyfills.concat(dependencies.concat(source)))
-        .pipe(sourcemaps.init())
-        .pipe(concat(source.replace('.js', '-with-polyfills.min.js')))
-        .pipe(uglify())
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('dist'));
-
     return gulp.src(dependencies.concat(source))
         .pipe(sourcemaps.init())
         .pipe(concat(source.replace('.js', '.min.js')))
@@ -58,6 +55,8 @@ gulp.task('dist', ['copy'], function() {
 });
 
 gulp.task('clean', del.bind(null, ['build', 'coverage', 'dist']));
+
+gulp.task('pr', ['lint', 'test-pr']);
 
 gulp.task('ci', ['lint', 'test-ci'], function () {
     gulp.src('./coverage/**/lcov.info')
