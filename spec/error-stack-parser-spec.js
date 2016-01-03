@@ -65,6 +65,14 @@ describe('ErrorStackParser', function () {
             expect(stackFrames[4]).toMatchStackFrame([undefined, undefined, 'http://localhost:8080/file.js', 33, 9]);
         });
 
+        it('should parse function names containing @ in Firefox 43 Error.stack', function () {
+            var stackFrames = unit.parse(CapturedExceptions.FIREFOX_43_FUNCTION_NAME_WITH_AT_SIGN);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(2);
+            expect(stackFrames[0]).toMatchStackFrame(['obj["@fn"]', undefined, 'Scratchpad/1', 10, 29]);
+            expect(stackFrames[1]).toMatchStackFrame([undefined, undefined, 'Scratchpad/1', 11, 1]);
+        });
+
         it('should parse V8 Error.stack', function () {
             var stackFrames = unit.parse(CapturedExceptions.CHROME_15);
             expect(stackFrames).toBeTruthy();
