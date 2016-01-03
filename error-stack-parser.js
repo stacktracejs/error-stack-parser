@@ -119,7 +119,7 @@
                 } else {
                     var tokens = line.split('@');
                     var locationParts = this.extractLocation(tokens.pop());
-                    var functionName = tokens.shift() || undefined;
+                    var functionName = tokens.join('@') || undefined;
                     return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
                 }
             }, this);
