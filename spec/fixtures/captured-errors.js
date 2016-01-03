@@ -253,6 +253,17 @@ CapturedExceptions.FIREFOX_43_NESTED_EVAL = {
     "@http://localhost:8080/file.js:33:9"
 };
 
+CapturedExceptions.FIREFOX_43_FUNCTION_NAME_WITH_AT_SIGN = {
+    message: "Dummy error",
+    name: "Error",
+    stack: 'obj["@fn"]@Scratchpad/1:10:29\n' +
+    "@Scratchpad/1:11:1\n" +
+    "",
+    fileName: "Scratchpad/1",
+    lineNumber: 10,
+    columnNumber: 29
+};
+
 CapturedExceptions.SAFARI_6 = {
     message: "'null' is not an object (evaluating 'x.undef')",
     stack: "@http://path/to/file.js:48\n" +
