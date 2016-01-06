@@ -28,7 +28,7 @@ gulp.task('test', function (done) {
 gulp.task('test-pr', ['copy', 'dist'], function (done) {
     new karma.Server({
         configFile: __dirname + '/karma.conf.js',
-        browsers: ['Firefox', 'Chrome'],
+        browsers: ['Firefox', 'Chrome_Travis'],
         singleRun: true
     }, done).start();
 });
