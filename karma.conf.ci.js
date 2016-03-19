@@ -44,16 +44,11 @@ module.exports = function (config) {
             browserName: 'chrome',
             version: 'dev'
         },
-        slFirefox42: {
+        slFirefox43: {
             base: 'SauceLabs',
             browserName: 'firefox',
             platform: 'Windows 8.1',
             version: '43.0'
-        },
-        slFirefoxDev: {
-            base: 'SauceLabs',
-            browserName: 'firefox',
-            version: 'dev'
         },
         slSafari8: {
             base: 'SauceLabs',
