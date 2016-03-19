@@ -1,4 +1,5 @@
 // jscs:disable disallowImplicitTypeConversion
+// jscs:disable maximumLineLength
 /* exported CapturedExceptions */
 var CapturedExceptions = {};
 
@@ -257,7 +258,7 @@ CapturedExceptions.FIREFOX_43_NESTED_EVAL = {
 CapturedExceptions.FIREFOX_43_FUNCTION_NAME_WITH_AT_SIGN = {
     message: 'Dummy error',
     name: 'Error',
-    stack: 'obj[\'@fn\']@Scratchpad/1:10:29\n' +
+    stack: 'obj["@fn"]@Scratchpad/1:10:29\n' +
     '@Scratchpad/1:11:1\n' +
     '',
     fileName: 'Scratchpad/1',
