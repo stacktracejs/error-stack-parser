@@ -96,7 +96,7 @@
                 var tokens = line.replace(/^\s+/, '').replace(/\(eval code/g, '(').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = tokens.join(' ') || undefined;
-                var fileName = locationParts[0] === 'eval' ? undefined : locationParts[0];
+                var fileName = ['eval', '<anonymous>'].indexOf(locationParts[0]) > -1 ? undefined : locationParts[0];
 
                 return new StackFrame(functionName, undefined, fileName, locationParts[1], locationParts[2], line);
             }, this);
