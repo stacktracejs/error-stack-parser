@@ -46,8 +46,9 @@
     return {
         /**
          * Given an Error object, extract the most information from it.
-         * @param error {Error}
-         * @return Array[StackFrame]
+         *
+         * @param {Error} error object
+         * @return {Array} of StackFrames
          */
         parse: function ErrorStackParser$$parse(error) {
             if (typeof error.stacktrace !== 'undefined' || typeof error['opera#sourceloc'] !== 'undefined') {
@@ -63,8 +64,9 @@
 
         /**
          * Separate line and column numbers from a URL-like string.
-         * @param urlLike String
-         * @return Array[String]
+         *
+         * @param {String} urlLike
+         * @return {Array} 3-tuple of URL, Line Number, and Column Number
          */
         extractLocation: function ErrorStackParser$$extractLocation(urlLike) {
             // Fail-fast but return locations like "(native)"
@@ -120,7 +122,12 @@
                     var tokens = line.split('@');
                     var locationParts = this.extractLocation(tokens.pop());
                     var functionName = tokens.join('@') || undefined;
-                    return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
+                    return new StackFrame(functionName,
+                        undefined,
+                        locationParts[0],
+                        locationParts[1],
+                        locationParts[2],
+                        line);
                 }
             }, this);
         },
@@ -159,7 +166,16 @@
             for (var i = 0, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame(match[3] || undefined, undefined, match[2], match[1], undefined, lines[i]));
+                    result.push(
+                        new StackFrame(
+                            match[3] || undefined,
+                            undefined,
+                            match[2],
+                            match[1],
+                            undefined,
+                            lines[i]
+                        )
+                    );
                 }
             }
 
@@ -183,8 +199,15 @@
                 if (functionCall.match(/\(([^\)]*)\)/)) {
                     argsRaw = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1');
                 }
-                var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ? undefined : argsRaw.split(',');
-                return new StackFrame(functionName, args, locationParts[0], locationParts[1], locationParts[2], line);
+                var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ?
+                    undefined : argsRaw.split(',');
+                return new StackFrame(
+                    functionName,
+                    args,
+                    locationParts[0],
+                    locationParts[1],
+                    locationParts[2],
+                    line);
             }, this);
         }
     };
