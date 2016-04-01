@@ -1,4 +1,4 @@
-(function (root, factory) {
+(function(root, factory) {
     'use strict';
     // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js, Rhino, and browsers.
 
@@ -46,8 +46,9 @@
     return {
         /**
          * Given an Error object, extract the most information from it.
-         * @param error {Error}
-         * @return Array[StackFrame]
+         *
+         * @param {Error} error object
+         * @return {Array} of StackFrames
          */
         parse: function ErrorStackParser$$parse(error) {
             if (typeof error.stacktrace !== 'undefined' || typeof error['opera#sourceloc'] !== 'undefined') {
@@ -63,8 +64,9 @@
 
         /**
          * Separate line and column numbers from a URL-like string.
-         * @param urlLike String
-         * @return Array[String]
+         *
+         * @param {String} urlLike
+         * @return {Array} 3-tuple of URL, Line Number, and Column Number
          */
         extractLocation: function ErrorStackParser$$extractLocation(urlLike) {
             // Fail-fast but return locations like "(native)"
@@ -84,11 +86,11 @@
         },
 
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
-            var filtered = _filter(error.stack.split('\n'), function (line) {
+            var filtered = _filter(error.stack.split('\n'), function(line) {
                 return !!line.match(CHROME_IE_STACK_REGEXP);
             }, this);
 
-            return _map(filtered, function (line) {
+            return _map(filtered, function(line) {
                 if (line.indexOf('(eval ') > -1) {
                     // Throw away eval information until we implement stacktrace.js/stackframe#8
                     line = line.replace(/eval code/g, 'eval').replace(/(\(eval at [^\()]*)|(\)\,.*$)/g, '');
@@ -96,18 +98,18 @@
                 var tokens = line.replace(/^\s+/, '').replace(/\(eval code/g, '(').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = tokens.join(' ') || undefined;
-                var fileName = locationParts[0] === 'eval' ? undefined : locationParts[0];
+                var fileName = ['eval', '<anonymous>'].indexOf(locationParts[0]) > -1 ? undefined : locationParts[0];
 
                 return new StackFrame(functionName, undefined, fileName, locationParts[1], locationParts[2], line);
             }, this);
         },
 
         parseFFOrSafari: function ErrorStackParser$$parseFFOrSafari(error) {
-            var filtered = _filter(error.stack.split('\n'), function (line) {
+            var filtered = _filter(error.stack.split('\n'), function(line) {
                 return !line.match(SAFARI_NATIVE_CODE_REGEXP);
             }, this);
 
-            return _map(filtered, function (line) {
+            return _map(filtered, function(line) {
                 // Throw away eval information until we implement stacktrace.js/stackframe#8
                 if (line.indexOf(' > eval') > -1) {
                     line = line.replace(/ line (\d+)(?: > eval line \d+)* > eval\:\d+\:\d+/g, ':$1');
@@ -119,8 +121,13 @@
                 } else {
                     var tokens = line.split('@');
                     var locationParts = this.extractLocation(tokens.pop());
-                    var functionName = tokens.shift() || undefined;
-                    return new StackFrame(functionName, undefined, locationParts[0], locationParts[1], locationParts[2], line);
+                    var functionName = tokens.join('@') || undefined;
+                    return new StackFrame(functionName,
+                        undefined,
+                        locationParts[0],
+                        locationParts[1],
+                        locationParts[2],
+                        line);
                 }
             }, this);
         },
@@ -159,7 +166,16 @@
             for (var i = 0, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame(match[3] || undefined, undefined, match[2], match[1], undefined, lines[i]));
+                    result.push(
+                        new StackFrame(
+                            match[3] || undefined,
+                            undefined,
+                            match[2],
+                            match[1],
+                            undefined,
+                            lines[i]
+                        )
+                    );
                 }
             }
 
@@ -168,12 +184,11 @@
 
         // Opera 10.65+ Error.stack very similar to FF/Safari
         parseOpera11: function ErrorStackParser$$parseOpera11(error) {
-            var filtered = _filter(error.stack.split('\n'), function (line) {
-                return !!line.match(FIREFOX_SAFARI_STACK_REGEXP) &&
-                    !line.match(/^Error created at/);
+            var filtered = _filter(error.stack.split('\n'), function(line) {
+                return !!line.match(FIREFOX_SAFARI_STACK_REGEXP) && !line.match(/^Error created at/);
             }, this);
 
-            return _map(filtered, function (line) {
+            return _map(filtered, function(line) {
                 var tokens = line.split('@');
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionCall = (tokens.shift() || '');
@@ -184,8 +199,15 @@
                 if (functionCall.match(/\(([^\)]*)\)/)) {
                     argsRaw = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1');
                 }
-                var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ? undefined : argsRaw.split(',');
-                return new StackFrame(functionName, args, locationParts[0], locationParts[1], locationParts[2], line);
+                var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ?
+                    undefined : argsRaw.split(',');
+                return new StackFrame(
+                    functionName,
+                    args,
+                    locationParts[0],
+                    locationParts[1],
+                    locationParts[2],
+                    line);
             }, this);
         }
     };
