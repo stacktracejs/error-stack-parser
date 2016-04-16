@@ -62,12 +62,7 @@
             }
         },
 
-        /**
-         * Separate line and column numbers from a URL-like string.
-         *
-         * @param {String} urlLike
-         * @return {Array} 3-tuple of URL, Line Number, and Column Number
-         */
+        // Separate line and column numbers from a URL-like string.
         extractLocation: function ErrorStackParser$$extractLocation(urlLike) {
             // Fail-fast but return locations like "(native)"
             if (urlLike.indexOf(':') === -1) {
