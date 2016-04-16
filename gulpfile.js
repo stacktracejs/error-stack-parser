@@ -11,21 +11,21 @@ var uglify = require('gulp-uglify');
 var dependencies = ['./node_modules/stackframe/dist/stackframe.js'];
 var source = 'error-stack-parser.js';
 
-gulp.task('lint', function () {
+gulp.task('lint', function() {
     return gulp.src(source)
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
         .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('test', function (done) {
+gulp.task('test', function(done) {
     new karma.Server({
         configFile: __dirname + '/karma.conf.js',
         singleRun: true
     }, done).start();
 });
 
-gulp.task('test-pr', ['copy', 'dist'], function (done) {
+gulp.task('test-pr', ['copy', 'dist'], function(done) {
     new karma.Server({
         configFile: __dirname + '/karma.conf.js',
         browsers: ['Firefox', 'Chrome_Travis'],
@@ -33,14 +33,14 @@ gulp.task('test-pr', ['copy', 'dist'], function (done) {
     }, done).start();
 });
 
-gulp.task('test-ci', ['dist'], function (done) {
+gulp.task('test-ci', ['dist'], function(done) {
     new karma.Server({
         configFile: __dirname + '/karma.conf.ci.js',
         singleRun: true
     }, done).start();
 });
 
-gulp.task('copy', function () {
+gulp.task('copy', function() {
     return gulp.src(source)
         .pipe(gulp.dest('dist'));
 });
@@ -58,11 +58,11 @@ gulp.task('clean', del.bind(null, ['build', 'coverage', 'dist']));
 
 gulp.task('pr', ['lint', 'test-pr']);
 
-gulp.task('ci', ['lint', 'test-ci'], function () {
+gulp.task('ci', ['lint', 'test-ci'], function() {
     gulp.src('./coverage/**/lcov.info')
         .pipe(coveralls());
 });
 
-gulp.task('default', ['clean'], function (cb) {
+gulp.task('default', ['clean'], function(cb) {
     runSequence('lint', 'dist', 'test', cb);
 });
