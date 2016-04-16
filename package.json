@@ -34,6 +34,7 @@
     "jasmine": "^2.3.2",
     "jasmine-core": "^2.3.4",
     "jscs": "^2.9.0",
+    "jsdoc-dash-template": "^1.2.0",
     "jshint": "^2.8.0",
     "karma": "~0.13",
     "karma-chrome-launcher": "^0.1.12",
