@@ -33,5 +33,5 @@ https://raw.githubusercontent.com/stacktracejs/error-stack-parser/master/dist/er
 ```
 
 ## Contributing
-Want to be listed as a *Contributor*? Start with the [Contributing Guide](CONTRIBUTING.md)!
+Want to be listed as a *Contributor*? Start with the [Contributing Guide](.github/CONTRIBUTING.md)!
 
