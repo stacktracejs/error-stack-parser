@@ -1,4 +1,4 @@
-module.exports = function (config) {
+module.exports = function(config) {
     if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY) {
         console.log('Make sure the SAUCE_USERNAME and SAUCE_ACCESS_KEY environment variables are set.');
         process.exit(1);
@@ -120,10 +120,10 @@ module.exports = function (config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: true,
-        browserDisconnectTimeout : 10000,
-        browserDisconnectTolerance : 1,
-        browserNoActivityTimeout : 240000,
-        captureTimeout : 240000,
+        browserDisconnectTimeout: 10000,
+        browserDisconnectTolerance: 1,
+        browserNoActivityTimeout: 240000,
+        captureTimeout: 240000,
         sauceLabs: {
             testName: 'error-stack-parser unit tests',
             recordScreenshots: false,

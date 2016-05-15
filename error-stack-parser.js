@@ -43,6 +43,19 @@
         }
     }
 
+    function _indexOf(array, target) {
+        if (typeof Array.prototype.indexOf === 'function') {
+            return array.indexOf(target);
+        } else {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] === target) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+    }
+
     return {
         /**
          * Given an Error object, extract the most information from it.
@@ -69,9 +82,9 @@
                 return [urlLike];
             }
 
-            var regExp = /(.+?)(?:\:(\d+))?(?:\:(\d+))?$/g;
+            var regExp = /(.+?)(?:\:(\d+))?(?:\:(\d+))?$/;
             var parts = regExp.exec(urlLike.replace(/[\(\)]/g, ''));
-            return [parts[1], parts[2], parts[3]];
+            return [parts[1], parts[2] || undefined, parts[3] || undefined];
         },
 
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
@@ -87,7 +100,7 @@
                 var tokens = line.replace(/^\s+/, '').replace(/\(eval code/g, '(').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = tokens.join(' ') || undefined;
-                var fileName = ['eval', '<anonymous>'].indexOf(locationParts[0]) > -1 ? undefined : locationParts[0];
+                var fileName = _indexOf(['eval', '<anonymous>'], locationParts[0]) > -1 ? undefined : locationParts[0];
 
                 return new StackFrame(functionName, undefined, fileName, locationParts[1], locationParts[2], line);
             }, this);
