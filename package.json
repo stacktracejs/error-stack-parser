@@ -2,7 +2,7 @@
   "name": "error-stack-parser",
   "description": "Extract meaning from JS Errors",
   "maintainers": [
-    "Eric Wendelin <me@eriwen.com> (http://www.eriwen.com)",
+    "Eric Wendelin <me@eriwen.com> (https://www.eriwen.com)",
     "Victor Homyakov <vkhomyackov@gmail.com> (https://github.com/victor-homyakov)",
     "Oliver Salzburg (https://github.com/oliversalzburg)"
   ],
