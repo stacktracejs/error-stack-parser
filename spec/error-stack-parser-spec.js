@@ -208,5 +208,15 @@ describe('ErrorStackParser', function() {
             expect(stackFrames[0]).toMatchStackFrame([undefined, undefined, 'http://path/to/file.js', 47, 22]);
             expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://path/to/file.js', 52, 15]);
         });
+
+        it('should handle webpack eval stacks', function() {
+            var stackframes = unit.parse({stack: 'ReferenceError: chilxdren is not defined\n ' +
+                'at Layout (eval at proxyClass (webpack:///../react-hot-loader/~/react-proxy/modules/createClassProxy.js?), <anonymous>:4:17)'
+            });
+            expect(stackframes.length).toBe(1);
+            expect(stackframes[0].fileName).toEqual('webpack:///../react-hot-loader/~/react-proxy/modules/createClassProxy.js?');
+            expect(stackframes[0].lineNumber).toBeUndefined();
+            expect(stackframes[0].lineNumber).toBeUndefined();
+        });
     });
 });

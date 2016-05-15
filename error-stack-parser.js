@@ -62,22 +62,16 @@
             }
         },
 
-        // Separate line and column numbers from a URL-like string.
+        // Separate line and column numbers from a string of the form: (URI:Line:Column)
         extractLocation: function ErrorStackParser$$extractLocation(urlLike) {
             // Fail-fast but return locations like "(native)"
             if (urlLike.indexOf(':') === -1) {
                 return [urlLike];
             }
 
-            var locationParts = urlLike.replace(/[\(\)\s]/g, '').split(':');
-            var lastNumber = locationParts.pop();
-            var possibleNumber = locationParts[locationParts.length - 1];
-            if (!isNaN(parseFloat(possibleNumber)) && isFinite(possibleNumber)) {
-                var lineNumber = locationParts.pop();
-                return [locationParts.join(':'), lineNumber, lastNumber];
-            } else {
-                return [locationParts.join(':'), lastNumber, undefined];
-            }
+            var regExp = /(.+?)(?:\:(\d+))?(?:\:(\d+))?$/g;
+            var parts = regExp.exec(urlLike.replace(/[\(\)]/g, ''));
+            return [parts[1], parts[2], parts[3]];
         },
 
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
