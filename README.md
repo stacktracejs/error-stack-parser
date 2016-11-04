@@ -19,8 +19,8 @@ are given a `stack` once they're `throw`n.
 ErrorStackParser.parse(new Error('boom'));
 
 => [
-        StackFrame('funky1', [], 'path/to/file.js', 35, 79), 
-        StackFrame('filter', undefined, 'https://cdn.somewherefast.com/utils.min.js', 1, 832),
+        StackFrame({functionName: 'funky1', args: [], fileName: 'path/to/file.js', lineNumber: 35, columnNumber: 79}),
+        StackFrame({functionName: 'filter', fileName: 'https://cdn.somewherefast.com/utils.min.js', lineNumber: 1, columnNumber: 832}),
         StackFrame(... and so on ...)
    ]
 ```
