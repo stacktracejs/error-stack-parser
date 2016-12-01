@@ -216,7 +216,7 @@ describe('ErrorStackParser', function() {
             expect(stackframes.length).toBe(1);
             expect(stackframes[0].fileName).toEqual('webpack:///../react-hot-loader/~/react-proxy/modules/createClassProxy.js?');
             expect(stackframes[0].lineNumber).toBeUndefined();
-            expect(stackframes[0].lineNumber).toBeUndefined();
+            expect(stackframes[0].columnNumber).toBeUndefined();
         });
     });
 });
