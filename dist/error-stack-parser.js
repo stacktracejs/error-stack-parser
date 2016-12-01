@@ -17,45 +17,6 @@
     var CHROME_IE_STACK_REGEXP = /^\s*at .*(\S+\:\d+|\(native\))/m;
     var SAFARI_NATIVE_CODE_REGEXP = /^(eval@)?(\[native code\])?$/;
 
-    function _map(array, fn, thisArg) {
-        if (typeof Array.prototype.map === 'function') {
-            return array.map(fn, thisArg);
-        } else {
-            var output = new Array(array.length);
-            for (var i = 0; i < array.length; i++) {
-                output[i] = fn.call(thisArg, array[i]);
-            }
-            return output;
-        }
-    }
-
-    function _filter(array, fn, thisArg) {
-        if (typeof Array.prototype.filter === 'function') {
-            return array.filter(fn, thisArg);
-        } else {
-            var output = [];
-            for (var i = 0; i < array.length; i++) {
-                if (fn.call(thisArg, array[i])) {
-                    output.push(array[i]);
-                }
-            }
-            return output;
-        }
-    }
-
-    function _indexOf(array, target) {
-        if (typeof Array.prototype.indexOf === 'function') {
-            return array.indexOf(target);
-        } else {
-            for (var i = 0; i < array.length; i++) {
-                if (array[i] === target) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-    }
-
     return {
         /**
          * Given an Error object, extract the most information from it.
@@ -88,11 +49,11 @@
         },
 
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
-            var filtered = _filter(error.stack.split('\n'), function(line) {
+            var filtered = error.stack.split('\n').filter(function(line) {
                 return !!line.match(CHROME_IE_STACK_REGEXP);
             }, this);
 
-            return _map(filtered, function(line) {
+            return filtered.map(function(line) {
                 if (line.indexOf('(eval ') > -1) {
                     // Throw away eval information until we implement stacktrace.js/stackframe#8
                     line = line.replace(/eval code/g, 'eval').replace(/(\(eval at [^\()]*)|(\)\,.*$)/g, '');
@@ -100,7 +61,7 @@
                 var tokens = line.replace(/^\s+/, '').replace(/\(eval code/g, '(').split(/\s+/).slice(1);
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionName = tokens.join(' ') || undefined;
-                var fileName = _indexOf(['eval', '<anonymous>'], locationParts[0]) > -1 ? undefined : locationParts[0];
+                var fileName = ['eval', '<anonymous>'].indexOf(locationParts[0]) > -1 ? undefined : locationParts[0];
 
                 return new StackFrame({
                     functionName: functionName,
@@ -113,11 +74,11 @@
         },
 
         parseFFOrSafari: function ErrorStackParser$$parseFFOrSafari(error) {
-            var filtered = _filter(error.stack.split('\n'), function(line) {
+            var filtered = error.stack.split('\n').filter(function(line) {
                 return !line.match(SAFARI_NATIVE_CODE_REGEXP);
             }, this);
 
-            return _map(filtered, function(line) {
+            return filtered.map(function(line) {
                 // Throw away eval information until we implement stacktrace.js/stackframe#8
                 if (line.indexOf(' > eval') > -1) {
                     line = line.replace(/ line (\d+)(?: > eval line \d+)* > eval\:\d+\:\d+/g, ':$1');
@@ -198,11 +159,11 @@
 
         // Opera 10.65+ Error.stack very similar to FF/Safari
         parseOpera11: function ErrorStackParser$$parseOpera11(error) {
-            var filtered = _filter(error.stack.split('\n'), function(line) {
+            var filtered = error.stack.split('\n').filter(function(line) {
                 return !!line.match(FIREFOX_SAFARI_STACK_REGEXP) && !line.match(/^Error created at/);
             }, this);
 
-            return _map(filtered, function(line) {
+            return filtered.map(function(line) {
                 var tokens = line.split('@');
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionCall = (tokens.shift() || '');
