@@ -95,14 +95,14 @@ module.exports = function(config) {
             browserName: 'internet explorer',
             platform: 'Windows 7',
             version: '9'
-        },
-        slIE8: {
-            base: 'SauceLabs',
-            browserName: 'internet explorer',
-            platform: 'Windows XP',
-            version: '8'
         }
         // Too unreliable on Sauce :(
+        // slIE8: {
+        //     base: 'SauceLabs',
+        //     browserName: 'internet explorer',
+        //     platform: 'Windows XP',
+        //     version: '8'
+        // }
         //slIE7: {
         //    base: 'SauceLabs',
         //    browserName: 'internet explorer',
