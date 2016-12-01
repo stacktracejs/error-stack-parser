@@ -102,7 +102,13 @@
                 var functionName = tokens.join(' ') || undefined;
                 var fileName = _indexOf(['eval', '<anonymous>'], locationParts[0]) > -1 ? undefined : locationParts[0];
 
-                return new StackFrame(functionName, undefined, fileName, locationParts[1], locationParts[2], line);
+                return new StackFrame({
+                    functionName: functionName,
+                    fileName: fileName,
+                    lineNumber: locationParts[1],
+                    columnNumber: locationParts[2],
+                    source: line
+                });
             }, this);
         },
 
@@ -119,17 +125,21 @@
 
                 if (line.indexOf('@') === -1 && line.indexOf(':') === -1) {
                     // Safari eval frames only have function names and nothing else
-                    return new StackFrame(line);
+                    return new StackFrame({
+                        functionName: line
+                    });
                 } else {
                     var tokens = line.split('@');
                     var locationParts = this.extractLocation(tokens.pop());
                     var functionName = tokens.join('@') || undefined;
-                    return new StackFrame(functionName,
-                        undefined,
-                        locationParts[0],
-                        locationParts[1],
-                        locationParts[2],
-                        line);
+
+                    return new StackFrame({
+                        functionName: functionName,
+                        fileName: locationParts[0],
+                        lineNumber: locationParts[1],
+                        columnNumber: locationParts[2],
+                        source: line
+                    });
                 }
             }, this);
         },
@@ -153,7 +163,11 @@
             for (var i = 2, len = lines.length; i < len; i += 2) {
                 var match = lineRE.exec(lines[i]);
                 if (match) {
-                    result.push(new StackFrame(undefined, undefined, match[2], match[1], undefined, lines[i]));
+                    result.push(new StackFrame({
+                        fileName: match[2],
+                        lineNumber: match[1],
+                        source: lines[i]
+                    }));
                 }
             }
 
@@ -169,14 +183,12 @@
                 var match = lineRE.exec(lines[i]);
                 if (match) {
                     result.push(
-                        new StackFrame(
-                            match[3] || undefined,
-                            undefined,
-                            match[2],
-                            match[1],
-                            undefined,
-                            lines[i]
-                        )
+                        new StackFrame({
+                            functionName: match[3] || undefined,
+                            fileName: match[2],
+                            lineNumber: match[1],
+                            source: lines[i]
+                        })
                     );
                 }
             }
@@ -203,15 +215,16 @@
                 }
                 var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ?
                     undefined : argsRaw.split(',');
-                return new StackFrame(
-                    functionName,
-                    args,
-                    locationParts[0],
-                    locationParts[1],
-                    locationParts[2],
-                    line);
+
+                return new StackFrame({
+                    functionName: functionName,
+                    args: args,
+                    fileName: locationParts[0],
+                    lineNumber: locationParts[1],
+                    columnNumber: locationParts[2],
+                    source: line
+                });
             }, this);
         }
     };
 }));
-
