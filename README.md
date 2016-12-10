@@ -16,11 +16,11 @@ are given a `stack` once they're `throw`n.
 
 ## Usage
 ```js
-ErrorStackParser.parse(new Error('boom'));
+ErrorStackParser.parse(new Error('BOOM'));
 
 => [
-        StackFrame({functionName: 'funky1', args: [], fileName: 'path/to/file.js', lineNumber: 35, columnNumber: 79}),
-        StackFrame({functionName: 'filter', fileName: 'https://cdn.somewherefast.com/utils.min.js', lineNumber: 1, columnNumber: 832}),
+        StackFrame({functionName: 'foo', args: [], fileName: 'path/to/file.js', lineNumber: 35, columnNumber: 79, isNative: false, isEval: false}),
+        StackFrame({functionName: 'Bar', fileName: 'https://cdn.somewherefast.com/utils.min.js', lineNumber: 1, columnNumber: 832, isNative: false, isEval: false, isConstructor: true}),
         StackFrame(... and so on ...)
    ]
 ```
