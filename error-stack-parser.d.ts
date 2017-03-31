@@ -62,3 +62,5 @@ declare module ErrorStackParser {
      */
     export function parse(error: Error): StackFrame[];
 }
+
+export = ErrorStackParser;
