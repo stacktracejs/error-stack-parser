@@ -53,10 +53,12 @@
     "url": "https://github.com/stacktracejs/error-stack-parser/issues"
   },
   "main": "./error-stack-parser.js",
+  "typings": "./error-stack-parser.d.ts",
   "files": [
     "LICENSE",
     "README.md",
     "error-stack-parser.js",
+    "error-stack-parser.d.ts",
     "dist/"
   ],
   "scripts": {
