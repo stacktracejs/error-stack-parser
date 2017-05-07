@@ -18,12 +18,13 @@ module.exports = function(config) {
             platform: 'OS X 10.11',
             version: '9.2'
         },
-        slIOS10: {
-            base: 'SauceLabs',
-            browserName: 'iPhone',
-            platform: 'macOS 10.12',
-            version: '10.2'
-        },
+        // *Sigh* Cannot get this working with appium or selenium...
+        // slIOS10: {
+        //     base: 'SauceLabs',
+        //     browserName: 'iPhone',
+        //     platform: 'macOS 10.12',
+        //     version: '10.2'
+        // },
         slAndroid4: {
             base: 'SauceLabs',
             browserName: 'Android',
