@@ -54,8 +54,23 @@
             }, this);
 
             return filtered.map(function(line) {
+                var evalStackFrame;
                 if (line.indexOf('(eval ') > -1) {
-                    // Throw away eval information until we implement stacktrace.js/stackframe#8
+                    var regExp = /\), (<[^>]+>:\d+:\d+)\)$/;
+                    var evalParts = regExp.exec(line);
+                    if (evalParts) {
+                        var evalLocationParts = this.extractLocation(evalParts[1]);
+
+                        evalStackFrame = new StackFrame({
+                            functionName: 'eval',
+                            fileName: evalLocationParts[0],
+                            lineNumber: evalLocationParts[1],
+                            columnNumber: evalLocationParts[2],
+                            source: line,
+                            isEval: true
+                        });
+                    }
+
                     line = line.replace(/eval code/g, 'eval').replace(/(\(eval at [^\()]*)|(\)\,.*$)/g, '');
                 }
                 var tokens = line.replace(/^\s+/, '').replace(/\(eval code/g, '(').split(/\s+/).slice(1);
@@ -63,13 +78,19 @@
                 var functionName = tokens.join(' ') || undefined;
                 var fileName = ['eval', '<anonymous>'].indexOf(locationParts[0]) > -1 ? undefined : locationParts[0];
 
-                return new StackFrame({
+                var stackFrame = new StackFrame({
                     functionName: functionName,
                     fileName: fileName,
                     lineNumber: locationParts[1],
                     columnNumber: locationParts[2],
                     source: line
                 });
+
+                if (evalStackFrame) {
+                    stackFrame.setEvalOrigin(evalStackFrame);
+                }
+
+                return stackFrame;
             }, this);
         },
 

@@ -116,6 +116,20 @@ describe('ErrorStackParser', function() {
             expect(stackFrames[4]).toMatchStackFrame([undefined, undefined, 'http://localhost:8080/file.js', 31, 13]);
         });
 
+        it('should parse and set eval origin for eval() from V8', function() {
+            var stackFrames = unit.parse(CapturedExceptions.CHROME_58_EVAL);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(6);
+            expect(stackFrames[0]).toMatchStackFrame(['willThrow', undefined, 'index.js', 11, undefined]);
+            expect(stackFrames[0].getEvalOrigin()).toMatchStackFrame(['eval', undefined, '<anonymous>', 3, 3]);
+            expect(stackFrames[1]).toMatchStackFrame(['eval', undefined, 'index.js', 11, undefined]);
+            expect(stackFrames[1].getEvalOrigin()).toMatchStackFrame(['eval', undefined, '<anonymous>', 6, 1]);
+            expect(stackFrames[2]).toMatchStackFrame(['h', undefined, 'index.js', 11, undefined]);
+            expect(stackFrames[3]).toMatchStackFrame(['g', undefined, 'index.js', 6, undefined]);
+            expect(stackFrames[4]).toMatchStackFrame(['f', undefined, 'index.js', 2, undefined]);
+            expect(stackFrames[5]).toMatchStackFrame([undefined, undefined, 'index.js', 23, undefined]);
+        });
+
         it('should parse IE 10 Error stacks', function() {
             var stackFrames = unit.parse(CapturedExceptions.IE_10);
             expect(stackFrames).toBeTruthy();

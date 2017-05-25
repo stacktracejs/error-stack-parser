@@ -194,6 +194,18 @@ CapturedExceptions.CHROME_48_NESTED_EVAL = {
     'at http://localhost:8080/file.js:31:13\n'
 };
 
+CapturedExceptions.CHROME_58_EVAL = {
+    message: 'message string',
+    name: 'Error',
+    stack: 'Error: message string\n' +
+    'at willThrow (eval at h (index.js:11), <anonymous>:3:3)\n' +
+    'at eval (eval at h (index.js:11), <anonymous>:6:1)\n' +
+    'at h (index.js:11)\n' +
+    'at g (index.js:6)\n' +
+    'at f (index.js:2)\n' +
+    'at index.js:23\n'
+};
+
 CapturedExceptions.FIREFOX_3 = {
     fileName: 'http://127.0.0.1:8000/js/stacktrace.js',
     lineNumber: 44,
