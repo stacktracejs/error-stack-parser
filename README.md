@@ -7,6 +7,7 @@ error-stack-parser.js - Extract meaning from JS Errors
 [![gzip size](https://img.shields.io/badge/gzipped-1.8k-green.svg?style=flat-square)](https://github.com/stacktracejs/error-stack-parser/releases)
 [![module format](https://img.shields.io/badge/module%20format-umd-lightgrey.svg?style=flat-square&colorB=ff69b4)](https://github.com/stacktracejs/error-stack-parser/releases)
 [![code of conduct](https://img.shields.io/badge/code%20of-conduct-lightgrey.svg?style=flat-square&colorB=ff69b4)](http://todogroup.org/opencodeofconduct/#stacktrace.js/me@eriwen.com)
+[![jsDelivr Hits](https://data.jsdelivr.com/v1/package/npm/error-stack-parser/badge)](https://www.jsdelivr.com/package/npm/error-stack-parser)
 
 Simple, cross-browser [Error](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) parser.
 This library parses and extracts function names, URLs, line numbers, and column numbers from the given Error's `stack` as
