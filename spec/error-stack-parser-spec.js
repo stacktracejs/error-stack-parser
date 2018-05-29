@@ -74,6 +74,22 @@ describe('ErrorStackParser', function() {
             expect(stackFrames[1]).toMatchStackFrame([undefined, undefined, 'Scratchpad/1', 11, 1]);
         });
 
+        it('should parse stack traces with @ in the URL', function() {
+            var stackFrames = unit.parse(CapturedExceptions.FIREFOX_60_URL_WITH_AT_SIGN);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(5);
+            expect(stackFrames[0]).toMatchStackFrame(['who', undefined, 'http://localhost:5000/misc/@stuff/foo.js', 3, 9]);
+            expect(stackFrames[1]).toMatchStackFrame(['what', undefined, 'http://localhost:5000/misc/@stuff/foo.js', 6, 3]);
+        });
+
+        it('should parse stack traces with @ in the URL and the method', function() {
+            var stackFrames = unit.parse(CapturedExceptions.FIREFOX_60_URL_AND_FUNCTION_NAME_WITH_AT_SIGN);
+            expect(stackFrames).toBeTruthy();
+            expect(stackFrames.length).toBe(5);
+            expect(stackFrames[0]).toMatchStackFrame(['obj["@who"]', undefined, 'http://localhost:5000/misc/@stuff/foo.js', 4, 9]);
+            expect(stackFrames[1]).toMatchStackFrame(['what', undefined, 'http://localhost:5000/misc/@stuff/foo.js', 8, 3]);
+        });
+
         it('should parse V8 Error.stack', function() {
             var stackFrames = unit.parse(CapturedExceptions.CHROME_15);
             expect(stackFrames).toBeTruthy();
