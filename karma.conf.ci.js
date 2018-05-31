@@ -6,12 +6,6 @@ module.exports = function(config) {
 
     // Check out https://saucelabs.com/platforms for all browser/platform combos
     var customLaunchers = {
-        // slIOS8: {
-        //     base: 'SauceLabs',
-        //     browserName: 'iPhone',
-        //     platform: 'OS X 10.12',
-        //     version: '8.4'
-        // },
         slIOS9: {
             base: 'SauceLabs',
             browserName: 'iPhone',
@@ -76,12 +70,6 @@ module.exports = function(config) {
             platform: 'OS X 10.11',
             version: '10.0'
         },
-        // SauceLabs discontinued support for all versions of Opera:
-        // https://wiki.saucelabs.com/pages/viewpage.action?pageId=70074721
-        // slOpera: {
-        //     base: 'SauceLabs',
-        //     browserName: 'opera'
-        // },
         slEdge14: {
             base: 'SauceLabs',
             browserName: 'microsoftedge',
