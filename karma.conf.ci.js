@@ -6,24 +6,15 @@ module.exports = function(config) {
 
     // Check out https://saucelabs.com/platforms for all browser/platform combos
     var customLaunchers = {
-        slIOS9: {
+        slIOSLatest: {
             base: 'SauceLabs',
-            browserName: 'iPhone',
-            platform: 'OS X 10.12',
-            version: '9.3'
+            browserName: 'iphone',
+            version: 'latest'
         },
-        // *Sigh* Cannot get this working with appium or selenium...
-        // slIOS10: {
-        //     base: 'SauceLabs',
-        //     browserName: 'iPhone',
-        //     platform: 'macOS 10.12',
-        //     version: '10.2'
-        // },
-        slAndroid4: {
+        slIOS10: {
             base: 'SauceLabs',
-            browserName: 'Android',
-            platform: 'Linux',
-            version: '4.4'
+            browserName: 'iphone',
+            version: '10.3'
         },
         slAndroid5: {
             base: 'SauceLabs',
