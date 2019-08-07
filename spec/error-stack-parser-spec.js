@@ -234,5 +234,13 @@ describe('ErrorStackParser', function() {
             expect(stackframes[0].lineNumber).toBeUndefined();
             expect(stackframes[0].columnNumber).toBeUndefined();
         });
+
+        it('should handle spaces in Node.js stacks', function() {
+            var stackframes = unit.parse(CapturedExceptions.NODE_WITH_SPACES);
+            expect(stackframes.length).toBe(7);
+            expect(stackframes[0].fileName).toEqual('/var/app/scratch/my project/index.js');
+            expect(stackframes[0].lineNumber).toBe(2);
+            expect(stackframes[0].columnNumber).toBe(9);
+        });
     });
 });
