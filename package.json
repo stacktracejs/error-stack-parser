@@ -64,6 +64,6 @@
   ],
   "scripts": {
     "test": "gulp test",
-    "prepublish": "gulp dist"
+    "prepublishOnly": "gulp dist"
   }
 }
