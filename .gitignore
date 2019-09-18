@@ -11,3 +11,4 @@ coverage
 
 .idea
 .coveralls.yml
+dist
