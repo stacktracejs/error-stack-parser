@@ -17,7 +17,7 @@
   ],
   "homepage": "https://www.stacktracejs.com",
   "dependencies": {
-    "stackframe": "^1.0.4"
+    "stackframe": "^1.1.0"
   },
   "repository": {
     "type": "git",
