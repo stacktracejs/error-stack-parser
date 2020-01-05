@@ -1,5 +1,5 @@
 // jscs:disable maximumLineLength
-/* global StackFrame: false, ErrorStackParser: false, CapturedExceptions: false */
+/* global ErrorStackParser: false, CapturedExceptions: false */
 describe('ErrorStackParser', function() {
     describe('#parse', function() {
         var unit = ErrorStackParser;

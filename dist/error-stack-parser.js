@@ -13,9 +13,9 @@
 }(this, function ErrorStackParser(StackFrame) {
     'use strict';
 
-    var FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+\:\d+/;
-    var CHROME_IE_STACK_REGEXP = /^\s*at .*(\S+\:\d+|\(native\))/m;
-    var SAFARI_NATIVE_CODE_REGEXP = /^(eval@)?(\[native code\])?$/;
+    var FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+:\d+/;
+    var CHROME_IE_STACK_REGEXP = /^\s*at .*(\S+:\d+|\(native\))/m;
+    var SAFARI_NATIVE_CODE_REGEXP = /^(eval@)?(\[native code])?$/;
 
     return {
         /**
@@ -43,8 +43,8 @@
                 return [urlLike];
             }
 
-            var regExp = /(.+?)(?:\:(\d+))?(?:\:(\d+))?$/;
-            var parts = regExp.exec(urlLike.replace(/[\(\)]/g, ''));
+            var regExp = /(.+?)(?::(\d+))?(?::(\d+))?$/;
+            var parts = regExp.exec(urlLike.replace(/[()]/g, ''));
             return [parts[1], parts[2] || undefined, parts[3] || undefined];
         },
 
@@ -56,7 +56,7 @@
             return filtered.map(function(line) {
                 if (line.indexOf('(eval ') > -1) {
                     // Throw away eval information until we implement stacktrace.js/stackframe#8
-                    line = line.replace(/eval code/g, 'eval').replace(/(\(eval at [^\()]*)|(\)\,.*$)/g, '');
+                    line = line.replace(/eval code/g, 'eval').replace(/(\(eval at [^()]*)|(\),.*$)/g, '');
                 }
                 var sanitizedLine = line.replace(/^\s+/, '').replace(/\(eval code/g, '(');
 
@@ -91,7 +91,7 @@
             return filtered.map(function(line) {
                 // Throw away eval information until we implement stacktrace.js/stackframe#8
                 if (line.indexOf(' > eval') > -1) {
-                    line = line.replace(/ line (\d+)(?: > eval line \d+)* > eval\:\d+\:\d+/g, ':$1');
+                    line = line.replace(/ line (\d+)(?: > eval line \d+)* > eval:\d+:\d+/g, ':$1');
                 }
 
                 if (line.indexOf('@') === -1 && line.indexOf(':') === -1) {
@@ -179,11 +179,11 @@
                 var locationParts = this.extractLocation(tokens.pop());
                 var functionCall = (tokens.shift() || '');
                 var functionName = functionCall
-                        .replace(/<anonymous function(: (\w+))?>/, '$2')
-                        .replace(/\([^\)]*\)/g, '') || undefined;
+                    .replace(/<anonymous function(: (\w+))?>/, '$2')
+                    .replace(/\([^)]*\)/g, '') || undefined;
                 var argsRaw;
-                if (functionCall.match(/\(([^\)]*)\)/)) {
-                    argsRaw = functionCall.replace(/^[^\(]+\(([^\)]*)\)$/, '$1');
+                if (functionCall.match(/\(([^)]*)\)/)) {
+                    argsRaw = functionCall.replace(/^[^(]+\(([^)]*)\)$/, '$1');
                 }
                 var args = (argsRaw === undefined || argsRaw === '[arguments not available]') ?
                     undefined : argsRaw.split(',');

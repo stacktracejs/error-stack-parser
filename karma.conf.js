@@ -20,7 +20,7 @@ module.exports = function(config) {
                 flags: ['--no-sandbox']
             }
         },
-        browsers: ['PhantomJS2'],
+        browsers: ['PhantomJS'],
         singleRun: false
     });
 };

@@ -267,29 +267,29 @@ CapturedExceptions.FIREFOX_43_FUNCTION_NAME_WITH_AT_SIGN = {
 };
 
 CapturedExceptions.FIREFOX_60_URL_WITH_AT_SIGN = {
-  message: 'culprit',
-  name: 'Error',
-  stack: 'who@http://localhost:5000/misc/@stuff/foo.js:3:9\n' +
+    message: 'culprit',
+    name: 'Error',
+    stack: 'who@http://localhost:5000/misc/@stuff/foo.js:3:9\n' +
   'what@http://localhost:5000/misc/@stuff/foo.js:6:3\n' +
   'where@http://localhost:5000/misc/@stuff/foo.js:9:3\n' +
   'why@http://localhost:5000/misc/@stuff/foo.js:12:3\n' +
   '@http://localhost:5000/misc/@stuff/foo.js:15:1\n',
-  fileName: 'http://localhost:5000/misc/@stuff/foo.js',
-  lineNumber: 3,
-  columnNumber: 9
+    fileName: 'http://localhost:5000/misc/@stuff/foo.js',
+    lineNumber: 3,
+    columnNumber: 9
 };
 
 CapturedExceptions.FIREFOX_60_URL_AND_FUNCTION_NAME_WITH_AT_SIGN = {
-  message: 'culprit',
-  name: 'Error',
-  stack: 'obj["@who"]@http://localhost:5000/misc/@stuff/foo.js:4:9\n' +
+    message: 'culprit',
+    name: 'Error',
+    stack: 'obj["@who"]@http://localhost:5000/misc/@stuff/foo.js:4:9\n' +
   'what@http://localhost:5000/misc/@stuff/foo.js:8:3\n' +
   'where@http://localhost:5000/misc/@stuff/foo.js:11:3\n' +
   'why@http://localhost:5000/misc/@stuff/foo.js:14:3\n' +
   '@http://localhost:5000/misc/@stuff/foo.js:17:1\n',
-  fileName: 'http://localhost:5000/misc/@stuff/foo.js',
-  lineNumber: 4,
-  columnNumber: 9
+    fileName: 'http://localhost:5000/misc/@stuff/foo.js',
+    lineNumber: 4,
+    columnNumber: 9
 };
 
 CapturedExceptions.SAFARI_6 = {
@@ -385,9 +385,9 @@ CapturedExceptions.EDGE_20_NESTED_EVAL = {
 };
 
 CapturedExceptions.NODE_WITH_SPACES = {
-  name: 'Error',
-  message: '',
-  stack: 'Error\n    at Object.<anonymous> ' +
+    name: 'Error',
+    message: '',
+    stack: 'Error\n    at Object.<anonymous> ' +
     '(/var/app/scratch/my ' +
     'project/index.js:2:9)\n    at Module._compile ' +
     '(internal/modules/cjs/loader.js:774:30)\n    at ' +
