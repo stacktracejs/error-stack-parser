@@ -58,6 +58,6 @@
     "test": "karma start karma.conf.js --single-run",
     "test-pr": "karma start karma.conf.js --single-run --browsers Firefox,Chrome_Travis",
     "test-ci": "karma start karma.conf.ci.js --single-run",
-    "prepare": "cp error-stack-parser.js dist/ && uglifyjs error-stack-parser.js -o dist/error-stack-parser.min.js --compress --mangle --source-map \"url=error-stack-parser.min.js.map\""
+    "prepare": "cp error-stack-parser.js dist/ && uglifyjs node_modules/stackframe/stackframe.js error-stack-parser.js -o dist/error-stack-parser.min.js --compress --mangle --source-map \"url=error-stack-parser.min.js.map\""
   }
 }
