@@ -19,9 +19,9 @@ declare module ErrorStackParser {
         getIsNative(): boolean;
         setIsNative(): void;
 
-        isTopLevel?: boolean;
-        getIsTopLevel(): boolean;
-        setIsTopLevel(): void;
+        isToplevel?: boolean;
+        getIsToplevel(): boolean;
+        setIsToplevel(): void;
 
         columnNumber?: number;
         getColumnNumber(): number;
