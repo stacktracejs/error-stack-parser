@@ -1,4 +1,3 @@
-// jscs:disable maximumLineLength
 /* global ErrorStackParser: false, CapturedExceptions: false */
 describe('ErrorStackParser', function() {
     describe('#parse', function() {
@@ -159,17 +158,6 @@ describe('ErrorStackParser', function() {
             expect(stackFrames[2]).toMatchStackFrame(['eval', undefined, undefined, 4, 18]);
             expect(stackFrames[3]).toMatchStackFrame(['speak', undefined, 'http://localhost:8080/file.js', 25, 17]);
             expect(stackFrames[4]).toMatchStackFrame(['Global code', undefined, 'http://localhost:8080/file.js', 32, 9]);
-        });
-
-        it('should parse nested eval() from V8', function() {
-            var stackFrames = unit.parse(CapturedExceptions.CHROME_48_NESTED_EVAL);
-            expect(stackFrames).toBeTruthy();
-            expect(stackFrames.length).toBe(5);
-            expect(stackFrames[0]).toMatchStackFrame(['baz', undefined, 'http://localhost:8080/file.js', 21, 17]);
-            expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://localhost:8080/file.js', 21, 17]);
-            expect(stackFrames[2]).toMatchStackFrame(['eval', undefined, 'http://localhost:8080/file.js', 21, 17]);
-            expect(stackFrames[3]).toMatchStackFrame(['Object.speak', undefined, 'http://localhost:8080/file.js', 21, 17]);
-            expect(stackFrames[4]).toMatchStackFrame([undefined, undefined, 'http://localhost:8080/file.js', 31, 13]);
         });
 
         it('should parse Opera 9.27 Error messages', function() {
