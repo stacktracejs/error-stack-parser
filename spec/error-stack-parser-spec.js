@@ -125,8 +125,12 @@ describe('ErrorStackParser', function() {
             expect(stackFrames).toBeTruthy();
             expect(stackFrames.length).toBe(5);
             expect(stackFrames[0]).toMatchStackFrame(['baz', undefined, 'http://localhost:8080/file.js', 21, 17]);
+            expect(stackFrames[0].evalOrigin).toMatchStackFrame(['foo', undefined, undefined, 1, 30]);
+            expect(stackFrames[0].evalOrigin.evalOrigin).toMatchStackFrame(['speak']);
             expect(stackFrames[1]).toMatchStackFrame(['foo', undefined, 'http://localhost:8080/file.js', 21, 17]);
+            expect(stackFrames[1].evalOrigin).toMatchStackFrame(['speak', undefined, undefined, 2, 96]);
             expect(stackFrames[2]).toMatchStackFrame(['eval', undefined, 'http://localhost:8080/file.js', 21, 17]);
+            expect(stackFrames[2].evalOrigin).toMatchStackFrame(['speak', undefined, undefined, 4, 18]);
             expect(stackFrames[3]).toMatchStackFrame(['Object.speak', undefined, 'http://localhost:8080/file.js', 21, 17]);
             expect(stackFrames[4]).toMatchStackFrame([undefined, undefined, 'http://localhost:8080/file.js', 31, 13]);
         });

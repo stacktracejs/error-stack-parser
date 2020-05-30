@@ -17,7 +17,7 @@
   ],
   "homepage": "https://www.stacktracejs.com",
   "dependencies": {
-    "stackframe": "^1.1.1"
+    "stackframe": "^1.2.0"
   },
   "repository": {
     "type": "git",
@@ -29,11 +29,11 @@
     "jasmine-core": "^3.5.0",
     "karma": "^4.4.1",
     "karma-chrome-launcher": "^3.1.0",
-    "karma-coverage": "^2.0.1",
+    "karma-coverage": "^2.0.2",
     "karma-coveralls": "^2.1.0",
     "karma-firefox-launcher": "^1.2.0",
     "karma-ie-launcher": "^1.0.0",
-    "karma-jasmine": "^1.1.2",
+    "karma-jasmine": "^3.3.1",
     "karma-opera-launcher": "^1.0.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-safari-launcher": "^1.0.0",

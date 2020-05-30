@@ -48,6 +48,42 @@
             return [parts[1], parts[2] || undefined, parts[3] || undefined];
         },
 
+        /**
+         * Given part of a raw StackFrame matching 'eval ...', return a possibly nested StackFrame representing
+         * an evalOrigin.
+         *
+         * @param {String} partialFrame matching an eval expression of a StackFrame
+         * @returns {StackFrame} eval origin frame
+         */
+        parseEvalOriginV8: function ErrorStackParser$$parseEvalOriginV8(partialFrame) {
+            if (partialFrame == null || partialFrame.length < 7) {
+                return undefined;
+            }
+
+            var sanitizedLine = partialFrame
+                .replace(/(\(eval at [^()]+ \([^()]+\)\), )/g, '') // Remove nested eval
+                .replace(/ \([^()]+\),?/g, '')                     // Remove top level location and trailing comma
+                .replace(/eval (code )?/g, '')                     // Remove remaining "eval ..." prefix
+
+            var location = sanitizedLine.match(/ ((\S+):(\d+):(\d+)$)/);
+            // remove the location from the line, if it was matched
+            sanitizedLine = location ? sanitizedLine.replace(location[0], '') : sanitizedLine;
+
+            var tokens = sanitizedLine.split(/\s+/).slice(1);
+            // if a location was matched, pass it to extractLocation() otherwise pop the last token
+            var locationParts = this.extractLocation(location ? location[1] : '');
+            var functionName = tokens.join(' ') || undefined;
+            var fileName = ['eval', '<anonymous>', ''].indexOf(locationParts[0]) > -1 ? undefined : locationParts[0];
+            return new StackFrame({
+                functionName: functionName,
+                fileName: fileName,
+                lineNumber: locationParts[1],
+                columnNumber: locationParts[2],
+                source: partialFrame,
+                evalOrigin: this.parseEvalOriginV8(partialFrame.substring(partialFrame.indexOf('(eval ') + 1, partialFrame.lastIndexOf(')')))
+            });
+        },
+
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
             var filtered = error.stack.split('\n').filter(function(line) {
                 return !!line.match(CHROME_IE_STACK_REGEXP);
@@ -55,12 +91,12 @@
 
             return filtered.map(function(line) {
                 if (line.indexOf('(eval ') > -1) {
-                    // Throw away eval information until we implement stacktrace.js/stackframe#8
+                    var evalOrigin = this.parseEvalOriginV8(line.substring(line.indexOf('(eval ') + 1, line.lastIndexOf(')')))
                     line = line.replace(/eval code/g, 'eval').replace(/(\(eval at [^()]*)|(\),.*$)/g, '');
                 }
                 var sanitizedLine = line.replace(/^\s+/, '').replace(/\(eval code/g, '(');
 
-                // capture and preseve the parenthesized location "(/foo/my bar.js:12:87)" in
+                // capture and preserve the parenthesized location "(/foo/my bar.js:12:87)" in
                 // case it has spaces in it, as the string is split on \s+ later on
                 var location = sanitizedLine.match(/ (\((.+):(\d+):(\d+)\)$)/);
 
@@ -78,7 +114,8 @@
                     fileName: fileName,
                     lineNumber: locationParts[1],
                     columnNumber: locationParts[2],
-                    source: line
+                    source: line,
+                    evalOrigin: evalOrigin
                 });
             }, this);
         },
