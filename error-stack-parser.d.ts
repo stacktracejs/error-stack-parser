@@ -3,57 +3,9 @@
 // Definitions by: Eric Wendelin <https://www.eriwen.com>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
+import StackFrame = require("stackframe");
+
 declare module ErrorStackParser {
-    export interface StackFrame {
-        constructor(object: StackFrame): StackFrame;
-
-        isConstructor?: boolean;
-        getIsConstructor(): boolean;
-        setIsConstructor(): void;
-
-        isEval?: boolean;
-        getIsEval(): boolean;
-        setIsEval(): void;
-
-        isNative?: boolean;
-        getIsNative(): boolean;
-        setIsNative(): void;
-
-        isToplevel?: boolean;
-        getIsToplevel(): boolean;
-        setIsToplevel(): void;
-
-        columnNumber?: number;
-        getColumnNumber(): number;
-        setColumnNumber(): void;
-
-        lineNumber?: number;
-        getLineNumber(): number;
-        setLineNumber(): void;
-
-        fileName?: string;
-        getFileName(): string;
-        setFileName(): void;
-
-        functionName?: string;
-        getFunctionName(): string;
-        setFunctionName(): void;
-
-        source?: string;
-        getSource(): string;
-        setSource(): void;
-
-        args?: any[];
-        getArgs(): any[];
-        setArgs(): void;
-
-        evalOrigin?: StackFrame;
-        getEvalOrigin(): StackFrame;
-        setEvalOrigin(): void;
-
-        toString(): string;
-    }
-
     /**
      * Given an Error object, extract the most information from it.
      *
