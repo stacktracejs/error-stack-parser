@@ -225,10 +225,13 @@ describe('ErrorStackParser', function() {
 
         it('should handle spaces in Node.js stacks', function() {
             var stackframes = unit.parse(CapturedExceptions.NODE_WITH_SPACES);
-            expect(stackframes.length).toBe(7);
+            expect(stackframes.length).toBe(8);
             expect(stackframes[0].fileName).toEqual('/var/app/scratch/my project/index.js');
             expect(stackframes[0].lineNumber).toBe(2);
             expect(stackframes[0].columnNumber).toBe(9);
+            expect(stackframes[1].fileName).toEqual('/var/app/scratch/my project/index.js');
+            expect(stackframes[1].lineNumber).toBe(2);
+            expect(stackframes[1].columnNumber).toBe(9);
         });
     });
 });
