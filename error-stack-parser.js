@@ -58,7 +58,7 @@
                     // Throw away eval information until we implement stacktrace.js/stackframe#8
                     line = line.replace(/eval code/g, 'eval').replace(/(\(eval at [^()]*)|(\),.*$)/g, '');
                 }
-                var sanitizedLine = line.replace(/^\s+/, '').replace(/\(eval code/g, '(');
+                var sanitizedLine = line.replace(/^\s+/, '').replace(/\(eval code/g, '(').replace(/^.*?\s+/, '');
 
                 // capture and preseve the parenthesized location "(/foo/my bar.js:12:87)" in
                 // case it has spaces in it, as the string is split on \s+ later on
@@ -67,7 +67,7 @@
                 // remove the parenthesized location from the line, if it was matched
                 sanitizedLine = location ? sanitizedLine.replace(location[0], '') : sanitizedLine;
 
-                var tokens = sanitizedLine.split(/\s+/).slice(1);
+                var tokens = sanitizedLine.split(/\s+/);
                 // if a location was matched, pass it to extractLocation() otherwise pop the last token
                 var locationParts = this.extractLocation(location ? location[1] : tokens.pop());
                 var functionName = tokens.join(' ') || undefined;
