@@ -62,7 +62,7 @@
 
                 // capture and preseve the parenthesized location "(/foo/my bar.js:12:87)" in
                 // case it has spaces in it, as the string is split on \s+ later on
-                var location = sanitizedLine.match(/ (\((.+):(\d+):(\d+)\)$)/);
+                var location = sanitizedLine.match(/ (\(.+\)$)/);
 
                 // remove the parenthesized location from the line, if it was matched
                 sanitizedLine = location ? sanitizedLine.replace(location[0], '') : sanitizedLine;
