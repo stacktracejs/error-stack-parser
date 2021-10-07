@@ -67,10 +67,10 @@
                 // remove the parenthesized location from the line, if it was matched
                 sanitizedLine = location ? sanitizedLine.replace(location[0], '') : sanitizedLine;
 
-                var tokens = sanitizedLine.split(/\s+/);
-                // if a location was matched, pass it to extractLocation() otherwise pop the last token
-                var locationParts = this.extractLocation(location ? location[1] : tokens.pop());
-                var functionName = tokens.join(' ') || undefined;
+                // if a location was matched, pass it to extractLocation() otherwise pass all sanitizedLine
+                // because this line doesn't have function name
+                var locationParts = this.extractLocation(location ? location[1] : sanitizedLine);
+                var functionName = location && sanitizedLine || undefined;
                 var fileName = ['eval', '<anonymous>'].indexOf(locationParts[0]) > -1 ? undefined : locationParts[0];
 
                 return new StackFrame({
