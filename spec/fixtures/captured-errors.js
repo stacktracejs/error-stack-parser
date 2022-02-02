@@ -387,7 +387,8 @@ CapturedExceptions.EDGE_20_NESTED_EVAL = {
 CapturedExceptions.NODE_WITH_SPACES = {
     name: 'Error',
     message: '',
-    stack: 'Error\n    at Object.<anonymous> ' +
+    stack: 'Error\n     at /var/app/scratch/my '+
+    'project/index.js:2:9\n    at Object.<anonymous> ' +
     '(/var/app/scratch/my ' +
     'project/index.js:2:9)\n    at Module._compile ' +
     '(internal/modules/cjs/loader.js:774:30)\n    at ' +
