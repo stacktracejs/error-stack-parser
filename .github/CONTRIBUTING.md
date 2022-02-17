@@ -18,11 +18,14 @@ Want to be listed as a *Contributor*? Make a pull request with:
 * Please keep code style consistent with surrounding code.
 
 ## Dev Setup
-* Make sure you have [NodeJS v0.10](http://nodejs.org/) installed
-* Run `npm install` from the project directory
+* Make sure you have [NodeJS v16.x](https://nodejs.org/) installed
+* Run `npm ci` from the project directory
+
+## Linting
+* Run `npm run lint` to run ESLint
 
 ## Testing
-* (Local) Run `npm test`. Make sure [Karma Local Config](karma.conf.js) has the browsers you want.
-* (Any browser, remotely) If you have a [Sauce Labs](https://saucelabs.com) account, you can run `gulp test-ci`.
- Make sure the target browser is enabled in [Karma CI Config](karma.conf.ci.js).
- Otherwise, Travis will run all browsers if you submit a Pull Request. 
+* (Local) Run `npm test`. Make sure [Karma Local Config](karma.conf.js) has the browsers you want
+* (Any browser, remotely) If you have a [Sauce Labs](https://saucelabs.com) account, you can run `npm run test-ci`
+ Make sure the target browser is enabled in [Karma CI Config](karma.conf.ci.js)
+ Otherwise, GitHub Actions will run all browsers if you submit a Pull Request.

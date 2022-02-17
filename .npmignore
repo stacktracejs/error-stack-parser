@@ -6,4 +6,3 @@ spec/
 .coveralls.yml
 .editorconfig
 .idea
-.travis.yml

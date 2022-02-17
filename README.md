@@ -1,6 +1,6 @@
 error-stack-parser.js - Extract meaning from JS Errors
 ===============
-[![Build Status](https://img.shields.io/travis/stacktracejs/error-stack-parser/master.svg?style=flat-square)](https://travis-ci.org/stacktracejs/error-stack-parser)
+[![Build Status](https://img.shields.io/github/workflow/status/stacktracejs/error-stack-parser/Continuous%20Integration/master?logo=github&style=flat-square)](https://github.com/stacktracejs/error-stack-parser/actions?query=workflow%3AContinuous+Integration+branch%3Amaster)
 [![Coverage Status](https://img.shields.io/coveralls/stacktracejs/error-stack-parser.svg?style=flat-square)](https://coveralls.io/r/stacktracejs/error-stack-parser?branch=master)
 [![GitHub license](https://img.shields.io/github/license/stacktracejs/error-stack-parser.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![size with dependencies](https://img.shields.io/badge/size-4.8k-green.svg?style=flat-square)](https://github.com/stacktracejs/error-stack-parser/releases)
