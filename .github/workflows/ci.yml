@@ -33,6 +33,10 @@ jobs:
         run: npm ci
       - name: Lint code
         run: npm run lint
+      - name: Coveralls
+        uses: coverallsapp/github-action@v1.1.0
+        with:
+          github-token: ${{ secrets.github_token }}
       - name: Run browser tests in Saucelabs
         run: npm run test-ci
         timeout-minutes: 5
