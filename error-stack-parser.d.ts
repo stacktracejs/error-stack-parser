@@ -3,16 +3,16 @@
 // Definitions by: Eric Wendelin <https://www.eriwen.com>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-import StackFrame = require("stackframe");
+import StackFrame from "stackframe";
 
-declare module ErrorStackParser {
+declare namespace ErrorStackParser {
     /**
      * Given an Error object, extract the most information from it.
      *
      * @param {Error} error object
      * @return {Array} of StackFrames
      */
-    export function parse(error: Error): StackFrame[];
+    function parse(error: Error): StackFrame[];
 }
 
-export = ErrorStackParser;
+export default ErrorStackParser;
