@@ -36,3 +36,13 @@ jobs:
       - name: Run browser tests in Saucelabs
         run: npm run test-ci
         timeout-minutes: 5
+      - name: Install lcov
+        run: |
+          sudo apt update
+          sudo apt install lcov
+      - name: Merge lcov reports
+        run: find coverage -name lcov.info -exec echo -a \"{}\" \; | xargs lcov -o coverage/lcov.info
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
