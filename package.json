@@ -24,21 +24,21 @@
     "url": "git://github.com/stacktracejs/error-stack-parser.git"
   },
   "devDependencies": {
-    "eslint": "^8.9.0",
-    "jasmine": "^4.0.2",
-    "jasmine-core": "^4.0.0",
-    "karma": "^6.3.16",
-    "karma-chrome-launcher": "^3.1.0",
+    "eslint": "^8.17.0",
+    "jasmine": "^4.1.0",
+    "jasmine-core": "^4.1.1",
+    "karma": "^6.3.20",
+    "karma-chrome-launcher": "^3.1.1",
     "karma-coverage": "^2.2.0",
     "karma-coveralls": "^2.1.0",
     "karma-firefox-launcher": "^2.1.2",
     "karma-ie-launcher": "^1.0.0",
-    "karma-jasmine": "^4.0.1",
+    "karma-jasmine": "^4.0.2",
     "karma-opera-launcher": "^1.0.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-safari-launcher": "^1.0.0",
     "karma-sauce-launcher": "^4.3.6",
-    "karma-spec-reporter": "^0.0.33",
+    "karma-spec-reporter": "^0.0.34",
     "uglify-es": "^3.3.9"
   },
   "bugs": {
