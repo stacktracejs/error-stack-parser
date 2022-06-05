@@ -1,4 +1,4 @@
-// Type definitions for ErrorStackParser v2.0.0
+// Type definitions for ErrorStackParser v2.1.0
 // Project: https://github.com/stacktracejs/error-stack-parser
 // Definitions by: Eric Wendelin <https://www.eriwen.com>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -13,7 +13,7 @@ declare namespace ErrorStackParser {
      * @param {Error} error object
      * @return {Array} of StackFrames
      */
-    function parse(error: Error): StackFrame[];
+    export function parse(error: Error): StackFrame[];
 }
 
 export default ErrorStackParser;

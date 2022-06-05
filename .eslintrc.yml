@@ -15,6 +15,7 @@ parserOptions:
 ignorePatterns:
   - 'coverage/**'
   - 'dist/**'
+  - '**/*.ts'
 rules:
   indent:
     - error
