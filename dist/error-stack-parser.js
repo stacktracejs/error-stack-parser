@@ -6,7 +6,7 @@
     if (typeof define === 'function' && define.amd) {
         define('error-stack-parser', ['stackframe'], factory);
     } else if (typeof exports === 'object') {
-        module.exports.default = factory(require('stackframe'));
+        module.exports = factory(require('stackframe'));
     } else {
         root.ErrorStackParser = factory(root.StackFrame);
     }
