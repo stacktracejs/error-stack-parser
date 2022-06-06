@@ -3,7 +3,7 @@
 // Definitions by: Eric Wendelin <https://www.eriwen.com>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-import StackFrame from "stackframe";
+import StackFrame = require("stackframe");
 
 declare namespace ErrorStackParser {
     export type {StackFrame};

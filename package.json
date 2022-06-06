@@ -7,7 +7,7 @@
     "Oliver Salzburg (https://github.com/oliversalzburg)",
     "Ben Gourley (https://github.com/bengourley)"
   ],
-  "version": "3.0.0",
+  "version": "2.1.2",
   "license": "MIT",
   "keywords": [
     "stacktrace",
@@ -17,7 +17,7 @@
   ],
   "homepage": "https://www.stacktracejs.com",
   "dependencies": {
-    "stackframe": "^1.3.0"
+    "stackframe": "^1.3.4"
   },
   "repository": {
     "type": "git",
