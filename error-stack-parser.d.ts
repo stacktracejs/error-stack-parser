@@ -16,4 +16,4 @@ declare namespace ErrorStackParser {
     export function parse(error: Error): StackFrame[];
 }
 
-export = ErrorStackParser;
+export default ErrorStackParser;
