@@ -42,9 +42,10 @@
             if (urlLike.indexOf(':') === -1) {
                 return [urlLike];
             }
-
+            // strip any parentheses from start and end of string (but not from inside)
+            var withoutParens = urlLike.replace(/^\(+/, '').replace(/\)+$/, '');
             var regExp = /(.+?)(?::(\d+))?(?::(\d+))?$/;
-            var parts = regExp.exec(urlLike.replace(/[()]/g, ''));
+            var parts = regExp.exec(withoutParens);
             return [parts[1], parts[2] || undefined, parts[3] || undefined];
         },
 
