@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/stacktracejs/error-stack-parser.git"
+    "url": "git+https://github.com/stacktracejs/error-stack-parser.git"
   },
   "devDependencies": {
     "eslint": "^8.17.0",
